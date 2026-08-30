@@ -1,0 +1,26 @@
+field	value
+Series_title	Neoadjuvant chemotherapy modulates T cell responses in high-grade serous ovarian cancer metastases
+Series_geo_accession	GSE71340
+Series_status	Public on Jul 27 2016
+Series_submission_date	Jul 24 2015
+Series_last_update_date	Jan 27 2020
+Series_pubmed_id	31940494
+Series_summary	Our data suggest that neoadjuvant chemotherapy enhances anti-cancer responses of T cells in peritoneal metastases of patients with high-grade serous ovarian cancer but does not decrease levels of immune checkpoint molecules, providing a rationale for sequential chemo-immunotherapy.
+Series_overall_design	tRNA was isolated from 35 omental tissue samples of HGSOC metastases either pre or post NACT treatment. RNASeq was performed on poly-A selected mRNA fragments, 100 b.p paired end, and strand specific, on average 40 million reads per sample.
+Series_type	Expression profiling by high throughput sequencing
+Series_contributor	Frances,,Balkwill
+Series_sample_id	GSM1832768 GSM1832769 GSM1832770 GSM1832771 GSM1832772 GSM1832773 GSM1832774 GSM1832775 GSM1832776 GSM1832777 GSM1832778 GSM1832779 GSM1832780 GSM1832781 GSM1832782 GSM1832783 GSM1832784 GSM1832785 GSM1832786 GSM1832787 GSM2040323 GSM2040324 GSM2040325 GSM2040326 GSM2040327 GSM2040328 GSM2122734 GSM2122735 GSM2122736 GSM2122737 GSM2122738 GSM2122739 GSM2122740 GSM2122741 GSM2122742 
+Series_contact_name	Oliver,,Pearce
+Series_contact_email	o.pearce@qmul.ac.uk
+Series_contact_laboratory	Cancer and Inflammation
+Series_contact_department	Barts Cancer Institute
+Series_contact_institute	Queen Mary University of London
+Series_contact_address	Charterhouse Square
+Series_contact_city	London
+Series_contact_zip/postal_code	EC1M 6BQ
+Series_contact_country	United Kingdom
+Series_supplementary_file	ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE71nnn/GSE71340/suppl/GSE71340_refseq_count_data.txt.gz
+Series_platform_id	GPL16791
+Series_platform_taxid	9606
+Series_sample_taxid	9606
+Series_relation	SRA: https://www.ncbi.nlm.nih.gov/sra?term=SRP061571

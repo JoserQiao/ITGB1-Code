@@ -1,0 +1,28 @@
+field	value
+Series_title	Stranded bulk Illumina RNASeq of human mammary tumors before and after neoadjuvant chemotherapy treatment
+Series_geo_accession	GSE240671
+Series_status	Public on Feb 28 2024
+Series_submission_date	Aug 11 2023
+Series_last_update_date	Feb 28 2024
+Series_pubmed_id	38374113
+Series_summary	This study is designed to find a reliable marker enabling to predict the response to treatment in patients with early breast cancers treated by neoadjuvant chemotherapy. This marker would allow on one hand to select more homogeneous patient cohorts requiring treatment escalation strategies, and on the other hand reduce the burden of toxicity (both treatment-related and financial) for the patients that will already derive high benefit from the conventional treatments. In this study, gene expression profiles were measured and correlated with the clinical response to neoadjuvant chemotherapy and other features like the epithelial to mesenchymal transition and the tumor immune cell infiltration.
+Series_overall_design	The gene expression of 95 tumors samples of primary breast cancer patients were analyzed pre-neoadjuvant chemotherapy by bulk stranded RNA sequencing. Among those 95 patients, 29 did not respond completely to the neoadjuvant chemotherapy, and the residual tumor after treatment were sequenced by the same technique.
+Series_type	Expression profiling by high throughput sequencing
+Series_contributor	François,P,Duhoux
+Series_sample_id	GSM7707262 GSM7707263 GSM7707264 GSM7707265 GSM7707266 GSM7707267 GSM7707268 GSM7707269 GSM7707270 GSM7707271 GSM7707272 GSM7707273 GSM7707274 GSM7707275 GSM7707276 GSM7707277 GSM7707278 GSM7707279 GSM7707280 GSM7707281 GSM7707282 GSM7707283 GSM7707284 GSM7707285 GSM7707286 GSM7707287 GSM7707288 GSM7707289 GSM7707290 GSM7707291 GSM7707292 GSM7707293 GSM7707294 GSM7707295 GSM7707296 GSM7707297 GSM7707298 GSM7707299 GSM7707300 GSM7707301 GSM7707302 GSM7707303 GSM7707304 GSM7707305 GSM7707306 GSM7707307 GSM7707308 GSM7707309 GSM7707310 GSM7707311 GSM7707312 GSM7707313 GSM7707314 GSM7707315 GSM7707316 GSM7707317 GSM7707318 GSM7707319 GSM7707320 GSM7707321 GSM7707322 GSM7707323 GSM7707324 GSM7707325 GSM7707326 GSM7707327 GSM7707328 GSM7707329 GSM7707330 GSM7707331 GSM7707332 GSM7707333 GSM7707334 GSM7707335 GSM7707336 GSM7707337 GSM7707338 GSM7707339 GSM7707340 GSM7707341 GSM7707342 GSM7707343 GSM7707344 GSM7707345 GSM7707346 GSM7707347 GSM7707348 GSM7707349 GSM7707350 GSM7707351 GSM7707352 GSM7707353 GSM7707354 GSM7707355 GSM7707356 GSM7707357 GSM7707358 GSM7707359 GSM7707360 GSM7707361 GSM7707362 GSM7707363 GSM7707364 GSM7707365 GSM7707366 GSM7707367 GSM7707368 GSM7707369 GSM7707370 GSM7707371 GSM7707372 GSM7707373 GSM7707374 GSM7707375 GSM7707376 GSM7707377 GSM7707378 GSM7707379 GSM7707380 GSM7707381 GSM7707382 GSM7707383 
+Series_contact_name	Claire,,Josse
+Series_contact_email	c.josse@chuliege.be
+Series_contact_phone	+32 4 366 25 74
+Series_contact_laboratory	Human Genetics
+Series_contact_department	Medical Oncology
+Series_contact_institute	CHU Liege
+Series_contact_address	rue de l'hopital, 1
+Series_contact_city	Liège
+Series_contact_state	Liège
+Series_contact_zip/postal_code	4000
+Series_contact_country	Belgium
+Series_supplementary_file	ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE240nnn/GSE240671/suppl/GSE240671_raw_count_all_libraries.csv.gz
+Series_platform_id	GPL24676
+Series_platform_taxid	9606
+Series_sample_taxid	9606
+Series_relation	BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1004593

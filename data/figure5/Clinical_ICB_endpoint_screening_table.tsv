@@ -1,0 +1,13 @@
+Dataset	Cancer	Treatment	Endpoint	P	Support	P_label
+GSE126044	NSCLC	anti-PD-1	ITGB1 higher in non-responders	0.4966758035508203	Not significant	0.497
+GSE126044	NSCLC	anti-PD-1	Non-responder fraction by ITGB1 group	1	Not significant	1
+GSE135222	NSCLC	anti-PD-1/PD-L1	Early180 by ITGB1 group	1	Not significant	1
+GSE135222	NSCLC	anti-PD-1/PD-L1	Early90 by ITGB1 group	1	Not significant	1
+GSE135222	NSCLC	anti-PD-1/PD-L1	PFS ITGB1-high shorter	0.7180095853214499	Not significant	0.718
+GSE136961	NSCLC	ICB cohort	ITGB1 higher in Non-DCB	0.2706629953488259	Not significant	0.271
+GSE136961	NSCLC	ICB cohort	Non-DCB fraction by ITGB1 group	0.3869969040247678	Not significant	0.387
+GSE136961	NSCLC	ICB cohort	OS by ITGB1 group	0.4250842915891403	Not significant	0.425
+GSE136961	NSCLC	ICB cohort	PFS by ITGB1 group	0.7641857135515789	Not significant	0.764
+GSE78220	Melanoma	anti-PD-1	ITGB1 expression higher in non-responders	0.17964055015107697	Not significant	0.18
+GSE78220	Melanoma	anti-PD-1	ITGB1-high worse OS	0.7136178836453677	Not significant	0.714
+GSE78220	Melanoma	anti-PD-1	Response proportion by ITGB1 group	0.7035671018979676	Not significant	0.704
