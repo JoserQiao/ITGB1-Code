@@ -1,10 +1,8 @@
 # ITGB1 cellular-origin and composition-aware analysis
 
-This repository reproduces the revised manuscript:
+This repository reproduces the manuscript:
 
 > Cellular origins, stromal confounding and context-dependent drug-sensitivity associations of bulk ITGB1 across cancers
-
-The revision replaces non-reproducible portal summaries, the archived GSE96058 Cox table, the former immune-exclusion counting test, and the discovery-only coexpression panel with analyses that begin from accession-level public inputs.
 
 ## Questions addressed
 
