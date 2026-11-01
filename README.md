@@ -1,42 +1,62 @@
-# ITGB1 figures 4-8 reproducibility package
+# ITGB1 cellular-origin and composition-aware analysis
 
-This repository regenerates manuscript Figures 4, 5 and 6 and Supplementary Figures S4, S5 and S6 from the included plot-ready source data. It also provides the deterministic panel-labeling utility used for the supplied GEPIA2 survival composites in Figures 7 and 8. It contains no machine-specific paths and no superseded exploratory plotting scripts.
+This repository reproduces the revised manuscript:
 
-## Contents
+> Cellular origins, stromal confounding and context-dependent drug-sensitivity associations of bulk ITGB1 across cancers
 
-- `data/figure4/`: source tables for the GSE96058 survival, GDSC pharmacogenomic, and corrected three-cohort pathway panels.
-- `data/figure5/`: source tables for TCGA immune correlations, TCGA project-adjusted regressions, GEO immune-exclusion analyses, and the Supplementary Figure S5 specificity analysis.
-- `data/figure6/`: processed expression TPM matrices and clinical matching files for GSE71340, GSE240671 and GSE212810.
-- `scripts/`: plotting scripts for Figures 4-6, the supplementary figures, and the Figure 7/8 survival-panel labeling utility.
-- `outputs/`: regenerated PNG/PDF figures and Figure 6 source tables, created by the pipeline.
+The revision replaces non-reproducible portal summaries, the archived GSE96058 Cox table, the former immune-exclusion counting test, and the discovery-only coexpression panel with analyses that begin from accession-level public inputs.
 
-## Reproduce all figures
+## Questions addressed
 
-From the repository root:
+1. Which tumour-microenvironment compartments contribute to bulk `ITGB1` expression?
+2. How much bulk `ITGB1` variation is associated with transcriptomic composition?
+3. Does `ITGB1` predict objective response, progression-free survival, or pathological complete response after composition adjustment?
+4. Which external pathway and GDSC associations remain after composition or cancer-lineage adjustment?
 
-```bash
-Rscript scripts/install_r_dependencies.R
-python3 -m pip install -r requirements.txt
-bash scripts/run_all.sh
+## Evidence layers
+
+- GSE195832: paired single-cell source attribution.
+- GSE91061, GSE78220, GSE176307 and GSE126044: pretreatment ICI objective response.
+- GSE135222: ICI progression-free survival.
+- GSE190826: neoadjuvant chemoradiotherapy pathological complete response.
+- GSE172356, GSE113255 and GSE76427: continuous composition-aware pathway validation.
+- Cell Model Passports/GDSC: 14 prespecified cytotoxic drugs with duplicate-assay control, lineage fixed effects, within-lineage random effects and leave-one-lineage-out sensitivity analysis.
+
+## Reproduce the workflow
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+.\scripts\run_all.ps1
 ```
 
-The pipeline writes `Figure4`, `Figure5`, `Figure6`, `Supplementary_FigureS4`, `Supplementary_FigureS5`, and `Supplementary_FigureS6` as both PNG and PDF files in `outputs/`. Figures 7 and 8 require the supplied portal-export PNGs and can be labeled with `scripts/annotate_survival_panels.py`; raw GEPIA2 survival tables are not included in this repository.
+`config/datasets.tsv` records every public URL and expected local path. Raw downloads and large processed matrices are intentionally not committed. The acquisition and preprocessing stages recreate them.
 
-For the supplied Figure 7 and Figure 8 composites:
+## Repository layout
 
-```bash
-python3 scripts/annotate_survival_panels.py --figure 7 --input path/to/Figure7.png --output outputs/Figure7.png
-python3 scripts/annotate_survival_panels.py --figure 8 --input path/to/Figure8.png --output outputs/Figure8.png
-```
+- `config/`: dataset manifest, cohort decisions, signatures and the prespecified GDSC drug family.
+- `scripts/acquisition/`: public-data downloads.
+- `scripts/preprocessing/`: cohort-specific preparation and patient-level filtering.
+- `scripts/analysis/`: cellular-origin, composition, clinical-endpoint, negative-control, external-pathway and lineage-aware GDSC analyses.
+- `scripts/validation/`: bootstrap, cross-validation, alternative-signature and invariant checks.
+- `scripts/visualization/`: final manuscript and supplementary figures.
+- `results/`: machine-readable final estimates used in the manuscript.
+- `figures/`: final PNG and PDF figures.
+- `MANUSCRIPT_CODE_MAP.md`: figure-by-figure mapping.
 
-## Software
+## Statistical guardrails
 
-The plotting scripts were tested with R 4.4.2 and Python 3.11. The R workflow uses only CRAN packages. Python dependencies are pinned in `requirements.txt`.
+- Pretreatment samples only for response prediction.
+- One analysis record per patient.
+- Cells are nested within patients; clinical inference is patient level.
+- Continuous standardized `ITGB1` in primary models; no median split for clinical inference.
+- `ITGB1` and each control marker are excluded from their own signatures.
+- Transcriptomic composition scores are proxies, not DNA-derived purity estimates.
+- DerSimonian-Laird tau-squared with modified Hartung-Knapp confidence intervals for small-k meta-analysis.
+- Duplicate GDSC assays are selected by sample coverage before association testing.
+- FDR is controlled within prespecified analysis families.
+- Association is not interpreted as causal resistance or therapeutic utility.
 
-## Analysis scope
+## Main result
 
-The repository contains plot-ready data rather than all raw sequencing files. The included source tables are exactly the inputs used for plotting, and data provenance is listed in `data/README.md`. Figure 4G is calculated from independently ranked gastric, pancreatic and liver tumour gene lists. Figure 5F is a descriptive running-enrichment curve and does not report a permutation-derived enrichment P value.
-
-## Data provenance
-
-Public datasets include GSE96058, GSE113255, GSE172356, GSE202069, GSE71340, GSE240671, GSE212810, TCGA and Cell Model Passports/GDSC. Please cite the original dataset resources when reusing the source data.
+Bulk `ITGB1` is composition sensitive and does not show stable stand-alone clinical-response discrimination. Composition and cancer-lineage adjustment attenuate pathway and drug-sensitivity associations, supporting a context-dependent rather than universal biomarker interpretation.

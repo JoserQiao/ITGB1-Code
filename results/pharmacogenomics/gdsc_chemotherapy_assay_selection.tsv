@@ -1,0 +1,17 @@
+drug_name	drug_class	drug_id	primary_assay	n	n_lineages
+5-Fluorouracil	antimetabolite	1073	True	960	28
+Cisplatin	platinum	1005	True	756	26
+Cyclophosphamide	alkylating_agent	1512	True	949	28
+Docetaxel	taxane	1007	True	959	28
+Docetaxel	taxane	1819	False	667	25
+Epirubicin	anthracycline	1511	True	950	28
+Gemcitabine	antimetabolite	1190	True	952	28
+Irinotecan	topoisomerase_inhibitor	1088	True	957	28
+Methotrexate	antimetabolite	1008	True	873	28
+Oxaliplatin	platinum	1089	True	959	28
+Oxaliplatin	platinum	1806	False	714	26
+Paclitaxel	taxane	1080	True	950	28
+SN-38	topoisomerase_inhibitor	1494	True	950	28
+Temozolomide	alkylating_agent	1375	True	957	28
+Topotecan	topoisomerase_inhibitor	1808	True	714	26
+Vinorelbine	vinca_alkaloid	2048	True	948	28

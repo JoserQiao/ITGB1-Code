@@ -1,0 +1,13 @@
+cohort	method	model	n	predictors	r_squared	adjusted_r_squared
+GSE91061	MCPcounter	stromal_immune	49	Fibroblasts,Endothelial cells,T cells,Monocytic lineage,Cytotoxic lymphocytes	0.25309215616767033	0.16624240688484127
+GSE91061	InternalRankSignatures	matched_stromal_immune	49	CAF_core,Endothelial,T_cell,Myeloid,Cytotoxic	0.2171212995507018	0.12608889252171362
+GSE78220	MCPcounter	stromal_immune	27	Fibroblasts,Endothelial cells,T cells,Monocytic lineage,Cytotoxic lymphocytes	0.2644687398412595	0.08934224932727364
+GSE78220	InternalRankSignatures	matched_stromal_immune	27	CAF_core,Endothelial,T_cell,Myeloid,Cytotoxic	0.508141811845231	0.3910327194274288
+GSE190826	MCPcounter	stromal_immune	105	Fibroblasts,Endothelial cells,T cells,Monocytic lineage,Cytotoxic lymphocytes	0.406104938973065	0.37611023892119955
+GSE190826	InternalRankSignatures	matched_stromal_immune	105	CAF_core,Endothelial,T_cell,Myeloid,Cytotoxic	0.45207620260805537	0.42440328354785606
+GSE176307	MCPcounter	stromal_immune	87	Fibroblasts,Endothelial cells,T cells,Monocytic lineage,Cytotoxic lymphocytes	0.23550155149501384	0.18831028924161963
+GSE176307	InternalRankSignatures	matched_stromal_immune	87	CAF_core,Endothelial,T_cell,Myeloid,Cytotoxic	0.3056006502424137	0.26273649284997
+GSE126044	MCPcounter	stromal_immune	16	Fibroblasts,Endothelial cells,T cells,Monocytic lineage,Cytotoxic lymphocytes	0.3709224963714842	0.05638374455722639
+GSE126044	InternalRankSignatures	matched_stromal_immune	16	CAF_core,Endothelial,T_cell,Myeloid,Cytotoxic	0.4346567158479755	0.15198507377196324
+GSE135222	MCPcounter	stromal_immune	27	Fibroblasts,Endothelial cells,T cells,Monocytic lineage,Cytotoxic lymphocytes	0.32762092532599707	0.1675306694512344
+GSE135222	InternalRankSignatures	matched_stromal_immune	27	CAF_core,Endothelial,T_cell,Myeloid,Cytotoxic	0.20302192811367237	0.013265244331213344

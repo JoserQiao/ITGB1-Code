@@ -1,0 +1,15 @@
+drug_name	drug_class	include_primary
+5-Fluorouracil	antimetabolite	1
+Cisplatin	platinum	1
+Cyclophosphamide	alkylating_agent	1
+Docetaxel	taxane	1
+Epirubicin	anthracycline	1
+Gemcitabine	antimetabolite	1
+Irinotecan	topoisomerase_inhibitor	1
+Methotrexate	antimetabolite	1
+Oxaliplatin	platinum	1
+Paclitaxel	taxane	1
+SN-38	topoisomerase_inhibitor	1
+Temozolomide	alkylating_agent	1
+Topotecan	topoisomerase_inhibitor	1
+Vinorelbine	vinca_alkaloid	1
