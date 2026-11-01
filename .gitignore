@@ -13,4 +13,6 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 *.part
+figures/*.svg
+results/pharmacogenomics/*_input.tsv.gz
 .DS_Store

@@ -5,6 +5,7 @@ These tables are the machine-readable estimates used in the revised manuscript a
 - `single_cell/`: patient-aggregated cellular-source results.
 - `robustness/`: composition bootstrap, cross-validation and AUC sensitivity outputs.
 - `clinical_response/`: cohort-specific and pooled objective-response, PFS and pCR estimates.
+- `power_precision/`: design-based minimum detectable effects for the clinical analyses.
 - `external_solid_tumor/`: composition diagnostics, pathway associations and negative controls.
 - `pharmacogenomics/`: lineage-adjusted, within-lineage and leave-one-lineage-out GDSC estimates.
 

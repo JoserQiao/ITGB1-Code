@@ -79,7 +79,7 @@ def main():
         all_correlations.append(corr)
         all_diagnostics.append(diagnostics)
         all_coefficients.append(coefficients)
-    out = root / "results/treatment_response"
+    out = root / "results/clinical_response"
     out.mkdir(parents=True, exist_ok=True)
     combined = pd.concat(all_results, ignore_index=True)
     combined.to_csv(out / "anti_pd1_model_results_v3.tsv", sep="\t", index=False)

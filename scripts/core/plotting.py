@@ -18,6 +18,7 @@ COHORT_COLORS = {
     "GSE176307": "#CC79A7",
     "GSE126044": "#E69F00",
     "GSE135222": "#56B4E9",
+    "IMvigor210": "#7B61A8",
 }
 FEATURE_LABELS = {
     "ITGB1": "Unadjusted ITGB1",
@@ -71,10 +72,10 @@ def load_composition_results(root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Combine original and external composition robustness results."""
     bootstrap = pd.concat([
         pd.read_csv(root / "results/robustness/bootstrap_composition_r2.tsv", sep="\t"),
-        pd.read_csv(root / "results/external_validation/external_bootstrap_composition_r2.tsv", sep="\t"),
+        pd.read_csv(root / "results/clinical_response/external_bootstrap_composition_r2.tsv", sep="\t"),
     ], ignore_index=True)
     cross_validation = pd.concat([
         pd.read_csv(root / "results/robustness/cross_validated_composition_r2.tsv", sep="\t"),
-        pd.read_csv(root / "results/external_validation/external_cross_validated_composition_r2.tsv", sep="\t"),
+        pd.read_csv(root / "results/clinical_response/external_cross_validated_composition_r2.tsv", sep="\t"),
     ], ignore_index=True)
     return bootstrap, cross_validation

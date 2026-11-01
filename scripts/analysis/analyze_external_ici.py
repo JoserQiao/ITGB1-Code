@@ -63,7 +63,7 @@ def random_effects_meta(response: pd.DataFrame) -> pd.DataFrame:
 def main() -> None:
     root, _ = parse_project_root()
     signatures = read_signatures(root / "config/signatures.tsv")
-    out = root / "results/external_validation"
+    out = root / "results/clinical_response"
     out.mkdir(parents=True, exist_ok=True)
     response_results, boot_rows, cv_rows = [], [], []
     for i, cohort in enumerate(["GSE176307", "GSE126044"]):
@@ -90,9 +90,14 @@ def main() -> None:
 
     new_response = pd.concat(response_results, ignore_index=True)
     new_response.to_csv(out / "new_ici_response_results.tsv", sep="\t", index=False)
-    old = pd.read_csv(root / "results/treatment_response/anti_pd1_model_results_v3.tsv", sep="\t")
+    old = pd.read_csv(root / "results/clinical_response/anti_pd1_model_results_v3.tsv", sep="\t")
     combined = pd.concat([old[old.feature.isin(ITGB1_FEATURES)], new_response], ignore_index=True)
     combined.to_csv(out / "four_ici_cohort_response_results.tsv", sep="\t", index=False)
+    imvigor_path = out / "IMvigor210_response_results.tsv"
+    if imvigor_path.is_file():
+        imvigor = pd.read_csv(imvigor_path, sep="\t")
+        combined = pd.concat([combined, imvigor[imvigor.feature.isin(ITGB1_FEATURES)]], ignore_index=True)
+    combined.to_csv(out / "five_ici_cohort_response_results.tsv", sep="\t", index=False, na_rep="NA")
     random_effects_meta(combined).to_csv(out / "random_effects_meta_analysis.tsv", sep="\t", index=False)
     pd.DataFrame(boot_rows).to_csv(out / "external_bootstrap_composition_r2.tsv", sep="\t", index=False)
     pd.DataFrame(cv_rows).to_csv(out / "external_cross_validated_composition_r2.tsv", sep="\t", index=False)

@@ -43,6 +43,27 @@ def jsonapi_table(path: Path) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def cell_model_lineages(path: Path) -> pd.DataFrame:
+    """Map Cell Model Passports model IDs to portal-native tissue lineages."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    tissues = {
+        str(item["id"]): item.get("attributes", {}).get("name")
+        for item in payload.get("included", [])
+        if item.get("type") == "tissue"
+    }
+    rows = []
+    for sample in payload.get("data", []):
+        relationships = sample.get("relationships", {})
+        tissue_data = relationships.get("tissue", {}).get("data") or {}
+        lineage = tissues.get(str(tissue_data.get("id")))
+        if not lineage:
+            lineage = sample.get("attributes", {}).get("sample_site")
+        for model in relationships.get("models", {}).get("data") or []:
+            rows.append({"model_id": str(model.get("id")), "lineage": lineage})
+    table = pd.DataFrame(rows).dropna(subset=["model_id", "lineage"])
+    return table.drop_duplicates("model_id")
+
+
 def random_effects_fisher_z(table: pd.DataFrame) -> dict[str, float | int]:
     """DerSimonian--Laird random-effects pooling of Fisher-z correlations."""
     d = table[(table.n >= MIN_LINEAGE_N_META) & table.spearman_rho.notna()].copy()
@@ -105,15 +126,10 @@ def load_analysis_table(root: Path, config_root: Path) -> pd.DataFrame:
     curves = curves.merge(classes[["drug_name", "drug_class"]], on="drug_name", how="inner")
     curves = curves.join(expression[["ITGB1_log2_tpm"]], on="model_id", how="inner")
 
-    model = pd.read_csv(root / "data/raw/DepMap/Model.csv", low_memory=False)
-    model = (
-        model[["SangerModelID", "OncotreeLineage", "OncotreePrimaryDisease"]]
-        .dropna(subset=["SangerModelID", "OncotreeLineage"])
-        .drop_duplicates("SangerModelID")
-    )
-    curves = curves.merge(model, left_on="model_id", right_on="SangerModelID", how="inner")
+    model = cell_model_lineages(root / "data/raw/CellModelPassports/samples.json")
+    curves = curves.merge(model, on="model_id", how="inner")
     curves["ln_ic50"] = pd.to_numeric(curves.ln_ic50, errors="coerce")
-    curves = curves.dropna(subset=["ln_ic50", "ITGB1_log2_tpm", "OncotreeLineage"])
+    curves = curves.dropna(subset=["ln_ic50", "ITGB1_log2_tpm", "lineage"])
 
     # Select the best-covered assay for duplicated drug names without looking
     # at an association estimate.  Retain all assay-level data in a QC table.
@@ -130,21 +146,21 @@ def load_analysis_table(root: Path, config_root: Path) -> pd.DataFrame:
 
 def analyze_drug(group: pd.DataFrame) -> tuple[dict, list[dict], list[dict]]:
     d = group.copy()
-    lineage_counts = d.OncotreeLineage.value_counts()
+    lineage_counts = d.lineage.value_counts()
     keep_lineages = lineage_counts[lineage_counts >= MIN_LINEAGE_N_FIXED].index
-    fixed = d[d.OncotreeLineage.isin(keep_lineages)].copy()
+    fixed = d[d.lineage.isin(keep_lineages)].copy()
     fixed["ITGB1_z"] = (
         (fixed.ITGB1_log2_tpm - fixed.ITGB1_log2_tpm.mean())
         / fixed.ITGB1_log2_tpm.std(ddof=0)
     )
 
     global_fit = smf.ols("ln_ic50 ~ ITGB1_z", data=fixed).fit(cov_type="HC3")
-    adjusted_fit = smf.ols("ln_ic50 ~ ITGB1_z + C(OncotreeLineage)", data=fixed).fit(cov_type="HC3")
+    adjusted_fit = smf.ols("ln_ic50 ~ ITGB1_z + C(lineage)", data=fixed).fit(cov_type="HC3")
     global_ci = global_fit.conf_int().loc["ITGB1_z"]
     adjusted_ci = adjusted_fit.conf_int().loc["ITGB1_z"]
 
     lineage_rows = []
-    for lineage, ld in d.groupby("OncotreeLineage"):
+    for lineage, ld in d.groupby("lineage"):
         if len(ld) < MIN_LINEAGE_N_META or ld.ITGB1_log2_tpm.nunique() < 3 or ld.ln_ic50.nunique() < 3:
             continue
         rho, p_value = spearmanr(ld.ITGB1_log2_tpm, ld.ln_ic50)
@@ -159,11 +175,11 @@ def analyze_drug(group: pd.DataFrame) -> tuple[dict, list[dict], list[dict]]:
     )
 
     loo_rows = []
-    for omitted in sorted(fixed.OncotreeLineage.unique()):
-        ld = fixed[fixed.OncotreeLineage.ne(omitted)]
-        if ld.OncotreeLineage.nunique() < 2:
+    for omitted in sorted(fixed.lineage.unique()):
+        ld = fixed[fixed.lineage.ne(omitted)]
+        if ld.lineage.nunique() < 2:
             continue
-        fit = smf.ols("ln_ic50 ~ ITGB1_z + C(OncotreeLineage)", data=ld).fit(cov_type="HC3")
+        fit = smf.ols("ln_ic50 ~ ITGB1_z + C(lineage)", data=ld).fit(cov_type="HC3")
         ci = fit.conf_int().loc["ITGB1_z"]
         loo_rows.append({
             "drug_id": d.drug_id.iloc[0], "drug_name": d.drug_name.iloc[0],
@@ -175,7 +191,7 @@ def analyze_drug(group: pd.DataFrame) -> tuple[dict, list[dict], list[dict]]:
     row = {
         "drug_id": d.drug_id.iloc[0], "drug_name": d.drug_name.iloc[0],
         "drug_class": d.drug_class.iloc[0], "n_total": len(d),
-        "n_fixed_effect_model": len(fixed), "n_lineages_fixed": fixed.OncotreeLineage.nunique(),
+        "n_fixed_effect_model": len(fixed), "n_lineages_fixed": fixed.lineage.nunique(),
         "global_beta_per_sd": global_fit.params["ITGB1_z"],
         "global_ci_low": global_ci.iloc[0], "global_ci_high": global_ci.iloc[1],
         "global_p_value": global_fit.pvalues["ITGB1_z"],
@@ -208,7 +224,7 @@ def main() -> None:
     curves.to_csv(out / "gdsc_ITGB1_lineage_analysis_input.tsv.gz", sep="\t", index=False, compression="gzip")
     assay_qc = (
         curves.groupby(["drug_name", "drug_class", "drug_id", "primary_assay"], as_index=False)
-        .agg(n=("model_id", "nunique"), n_lineages=("OncotreeLineage", "nunique"))
+        .agg(n=("model_id", "nunique"), n_lineages=("lineage", "nunique"))
     )
     assay_qc.to_csv(out / "gdsc_chemotherapy_assay_selection.tsv", sep="\t", index=False)
 

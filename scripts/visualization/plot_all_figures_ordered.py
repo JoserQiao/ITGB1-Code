@@ -47,17 +47,18 @@ def figure1(root, out, source):
     gs = fig.add_gridspec(2, 2, height_ratios=[.8, 1.25])
 
     ax = fig.add_subplot(gs[0, :]); ax.axis("off"); panel(ax, "A")
-    boxes = [(0.02, "Single-cell source\nHNSCC, 4 paired patients", "#D9EAF7"),
-             (0.27, "Bulk composition\n6 cohorts, n=311", "#DDF1E8"),
-             (0.52, "Clinical response\n4 ICI cohorts, n=179", "#F5E3D3"),
-             (0.77, "Supporting analyses\nGSEA, GDSC, CRISPR", "#EDE2F2")]
+    boxes = [(0.01, "Single-cell source\nHNSCC, 4 paired patients", "#D9EAF7"),
+             (0.205, "Bulk composition\n6 cohorts, n=311", "#DDF1E8"),
+             (0.40, "Clinical response\n5 ICI cohorts, n=477", "#F5E3D3"),
+             (0.595, "External pathways\n3 solid-tumour cohorts", "#F8E7A8"),
+             (0.79, "Pharmacogenomics\nlineage-aware GDSC", "#EDE2F2")]
     for x, txt, color in boxes:
-        patch = FancyBboxPatch((x, .27), .20, .45, boxstyle="round,pad=.012,rounding_size=.02",
+        patch = FancyBboxPatch((x, .27), .17, .45, boxstyle="round,pad=.012,rounding_size=.02",
                                facecolor=color, edgecolor="#555555", lw=.9, transform=ax.transAxes)
-        ax.add_patch(patch); ax.text(x+.10, .495, txt, ha="center", va="center", fontsize=9,
+        ax.add_patch(patch); ax.text(x+.085, .495, txt, ha="center", va="center", fontsize=8.3,
                                     transform=ax.transAxes)
-    for x in [.225, .475, .725]:
-        ax.add_patch(FancyArrowPatch((x, .495), (x+.04, .495), arrowstyle="-|>", mutation_scale=12,
+    for x in [.18, .375, .57, .765]:
+        ax.add_patch(FancyArrowPatch((x, .495), (x+.025, .495), arrowstyle="-|>", mutation_scale=11,
                                     lw=1, color="#555555", transform=ax.transAxes))
     ax.text(.5, .90, "Analysis framework: from cellular origin to clinical relevance",
             ha="center", va="center", fontsize=11, fontweight="bold", transform=ax.transAxes)
@@ -141,18 +142,19 @@ def figure2(root, out, source):
 
 
 def figure3(root,out,source):
-    response=pd.read_csv(root/"results/external_validation/four_ici_cohort_response_results.tsv",sep="\t")
-    meta=pd.read_csv(root/"results/external_validation/random_effects_meta_analysis.tsv",sep="\t")
-    pfs=pd.read_csv(root/"results/external_validation/GSE135222_pfs_results.tsv",sep="\t")
-    rect=pd.read_csv(root/"results/treatment_response/rectal_chemoradiotherapy_results_v3.tsv",sep="\t")
-    response.to_csv(source/"Figure3_response_source.tsv",sep="\t",index=False)
+    response=pd.read_csv(root/"results/clinical_response/five_ici_cohort_response_results.tsv",sep="\t")
+    meta=pd.read_csv(root/"results/clinical_response/random_effects_meta_analysis.tsv",sep="\t")
+    pfs=pd.read_csv(root/"results/clinical_response/GSE135222_pfs_results.tsv",sep="\t")
+    rect=pd.read_csv(root/"results/clinical_response/rectal_chemoradiotherapy_results_v3.tsv",sep="\t")
+    response.to_csv(source/"Figure3_response_source.tsv",sep="\t",index=False,na_rep="NA")
     meta.to_csv(source/"Figure3_meta_source.tsv",sep="\t",index=False)
     fig,axes=plt.subplots(2,2,figsize=(11,8),constrained_layout=True)
 
     ax=axes[0,0];panel(ax,"A")
-    d=response[response.feature.eq("ITGB1")].set_index("cohort").loc[["GSE91061","GSE78220","GSE176307","GSE126044"]].reset_index()
+    cohort_order=["GSE91061","GSE78220","GSE176307","GSE126044","IMvigor210"]
+    d=response[response.feature.eq("ITGB1")].set_index("cohort").loc[cohort_order].reset_index()
     pooled=meta[meta.feature.eq("ITGB1")].iloc[0]; labels=[f"{r.cohort} (n={r.n})" for r in d.itertuples()]+["Random-effects pooled"]
-    est=np.r_[d.odds_ratio_per_sd,pooled.pooled_or];lo=np.r_[d.ci_low,pooled.ci_low];hi=np.r_[d.ci_high,pooled.ci_high];y=np.arange(5)[::-1]
+    est=np.r_[d.odds_ratio_per_sd,pooled.pooled_or];lo=np.r_[d.ci_low,pooled.ci_low];hi=np.r_[d.ci_high,pooled.ci_high];y=np.arange(6)[::-1]
     for i,r in d.iterrows(): ax.errorbar(est[i],y[i],xerr=[[est[i]-lo[i]],[hi[i]-est[i]]],fmt='o',color=COLORS[r.cohort],capsize=2)
     ax.errorbar(est[-1],y[-1],xerr=[[est[-1]-lo[-1]],[hi[-1]-est[-1]]],fmt='D',color="#222222",capsize=3)
     ax.axvline(1,color="#555",ls="--",lw=.8);ax.set_xscale("log");ax.set_yticks(y,labels)
@@ -165,7 +167,7 @@ def figure3(root,out,source):
     ax.set_xlabel("Random-effects pooled response OR (95% CI)");ax.set_title("Effect of composition adjustment");clean(ax,"x")
 
     ax=axes[1,0];panel(ax,"C")
-    cohorts=["GSE91061","GSE78220","GSE176307","GSE126044"]; offsets=np.linspace(-.24,.24,4)
+    cohorts=["GSE91061","GSE78220","GSE176307","GSE126044","IMvigor210"]; offsets=np.linspace(-.28,.28,5)
     for off,c in zip(offsets,cohorts):
         d=response[response.cohort.eq(c)].set_index("feature").loc[FEATURES]
         ax.plot(np.arange(5)+off,d.auc_discrimination,'o-',color=COLORS[c],lw=1,ms=4,label=c)

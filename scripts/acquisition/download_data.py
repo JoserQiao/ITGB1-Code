@@ -59,6 +59,10 @@ def main() -> None:
     for rec in records:
         if args.only and rec["dataset"] not in args.only:
             continue
+        # Paged Cell Model Passports endpoints are handled by download_cmp.py,
+        # which preserves JSON:API pagination and included tissue resources.
+        if rec["role"].startswith("pharmacogenomic_"):
+            continue
         dest = root / rec["local_path"]
         if rec["source_url"].endswith(".git"):
             if not dest.exists():

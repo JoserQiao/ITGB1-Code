@@ -24,7 +24,7 @@ def main():
                 "CAF_core", "ECM", "Endothelial", "iCAF", "myCAF"]
     for feature in features:
         rows.append({"feature": feature, **fit_binary_response_feature(frame, feature)})
-    out = root / "results/treatment_response"
+    out = root / "results/clinical_response"
     out.mkdir(parents=True, exist_ok=True)
     frame.to_csv(d / "analysis_features_v3.tsv", sep="\t", index_label="gsm")
     result = pd.DataFrame(rows)

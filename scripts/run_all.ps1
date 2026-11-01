@@ -39,17 +39,29 @@ try {
     Invoke-PipelineStep 'scripts.acquisition.download_data'
     Invoke-PipelineStep 'scripts.acquisition.download_cmp'
     Invoke-PipelineStep 'scripts.acquisition.download_external_solid_tumor'
+    Invoke-PipelineStep 'scripts.acquisition.download_imvigor210'
 
     # 2. Cohort preprocessing
     Invoke-PipelineStep 'scripts.preprocessing.prepare_geo'
     Invoke-PipelineStep 'scripts.preprocessing.prepare_external_ici'
     Invoke-PipelineStep 'scripts.preprocessing.prepare_external_solid_tumor'
+    $Rscript = Get-Command Rscript -ErrorAction SilentlyContinue
+    if (-not $Rscript) {
+        throw 'Rscript was not found. IMvigor210 preprocessing requires R with Bioconductor DESeq2.'
+    }
+    & $Rscript.Source (Join-Path $ProjectRoot 'scripts/preprocessing/export_imvigor210.R') `
+        (Join-Path $ProjectRoot 'data/raw/IMvigor210/cds.RData') `
+        (Join-Path $ProjectRoot 'config/signatures.tsv') `
+        (Join-Path $ProjectRoot 'data/processed/IMvigor210')
+    if ($LASTEXITCODE -ne 0) { throw 'IMvigor210 R preprocessing failed.' }
 
     # 3. Primary analyses
     Invoke-PipelineStep 'scripts.analysis.analyze_response'
     Invoke-PipelineStep 'scripts.analysis.analyze_rectal_response'
     Invoke-PipelineStep 'scripts.analysis.analyze_single_cell'
+    Invoke-PipelineStep 'scripts.analysis.analyze_imvigor210'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_ici'
+    Invoke-PipelineStep 'scripts.analysis.analyze_power_precision'
     Invoke-PipelineStep 'scripts.analysis.analyze_gdsc_lineage_adjusted'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_solid_tumor'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_marker_controls'
