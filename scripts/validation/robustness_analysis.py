@@ -53,19 +53,17 @@ def bootstrap_composition(frame: pd.DataFrame, cohort: str, b: int, seed: int):
 def bootstrap_auc(frame: pd.DataFrame, cohort: str, b: int, seed: int):
     rng = np.random.default_rng(seed)
     y = frame.response.to_numpy(int)
-    raw_itgb1_auc = roc_auc_score(y, frame["ITGB1"])
-    # Keep every residual score in the same response direction as the original
-    # ITGB1 score. This avoids interpreting a sign flip around AUC=0.5 as an
-    # improvement after composition adjustment.
-    direction = 1.0 if raw_itgb1_auc >= 0.5 else -1.0
-    point_auc = {f: roc_auc_score(y, direction * frame[f]) for f in ITGB1_FEATURES}
+    # The direction is fixed before analysis: higher ITGB1 is evaluated as a
+    # marker of non-response (resistance). Never flip an AUC by cohort or score.
+    y_resistance = 1 - y
+    point_auc = {f: roc_auc_score(y_resistance, frame[f]) for f in ITGB1_FEATURES}
     distributions = {f: [] for f in ITGB1_FEATURES}
     deltas = {f: [] for f in ITGB1_FEATURES[1:]}
     for _ in range(b):
         idx = rng.integers(0, len(frame), len(frame))
         if np.unique(y[idx]).size < 2:
             continue
-        aucs = {f: roc_auc_score(y[idx], direction * frame[f].to_numpy()[idx]) for f in ITGB1_FEATURES}
+        aucs = {f: roc_auc_score(y_resistance[idx], frame[f].to_numpy()[idx]) for f in ITGB1_FEATURES}
         for f, value in aucs.items():
             distributions[f].append(value)
         for f in ITGB1_FEATURES[1:]:
@@ -73,16 +71,16 @@ def bootstrap_auc(frame: pd.DataFrame, cohort: str, b: int, seed: int):
     rows = []
     for f in ITGB1_FEATURES:
         lo, hi = np.quantile(distributions[f], [0.025, 0.975])
-        rows.append({"cohort": cohort, "estimand": "auc_oriented_to_original_ITGB1", "feature": f,
+        rows.append({"cohort": cohort, "estimand": "auc_resistance_direction", "feature": f,
                      "estimate": point_auc[f], "ci_low": lo, "ci_high": hi,
                      "bootstrap_replicates": len(distributions[f]),
-                     "orientation": "higher_response" if direction > 0 else "lower_response"})
+                     "orientation": "higher_nonresponse"})
     for f in ITGB1_FEATURES[1:]:
         lo, hi = np.quantile(deltas[f], [0.025, 0.975])
         rows.append({"cohort": cohort, "estimand": "auc_difference_vs_unadjusted",
                      "feature": f, "estimate": point_auc[f] - point_auc["ITGB1"],
                      "ci_low": lo, "ci_high": hi, "bootstrap_replicates": len(deltas[f]),
-                     "orientation": "higher_response" if direction > 0 else "lower_response"})
+                     "orientation": "higher_nonresponse"})
     return rows
 
 

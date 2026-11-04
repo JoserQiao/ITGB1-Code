@@ -1,0 +1,4 @@
+tau_log_or	target_power	simulated_minimum_detectable_or_magnitude	replicates_per_effect
+0.0	0.8	1.55	20000
+0.1	0.8	1.675	20000
+0.2	0.8	1.9	20000

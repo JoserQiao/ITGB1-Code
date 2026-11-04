@@ -18,7 +18,11 @@ from sklearn.metrics import brier_score_loss, roc_auc_score
 
 from scripts.core.cli import parse_project_root
 from scripts.core.common import ITGB1_FEATURES, add_itgb1_composition_residuals, fit_binary_response_feature
-from scripts.analysis.analyze_external_ici import random_effects_meta
+from scripts.analysis.analyze_external_ici import (
+    leave_one_cohort_out_meta,
+    meta_sensitivity,
+    random_effects_meta,
+)
 
 
 def model_metrics(fit, data):
@@ -78,7 +82,12 @@ def main():
         four = pd.read_csv(four_path, sep="\t")
         five = pd.concat([four, response_results], ignore_index=True)
         five.to_csv(out / "five_ici_cohort_response_results.tsv", sep="\t", index=False, na_rep="NA")
-        random_effects_meta(five).to_csv(out / "random_effects_meta_analysis.tsv", sep="\t", index=False)
+        random_effects_meta(five, "REML").to_csv(
+            out / "random_effects_meta_analysis.tsv", sep="\t", index=False)
+        meta_sensitivity(five).to_csv(
+            out / "random_effects_meta_sensitivity.tsv", sep="\t", index=False)
+        leave_one_cohort_out_meta(five).to_csv(
+            out / "random_effects_meta_leave_one_cohort_out.tsv", sep="\t", index=False)
     diagnostics.to_csv(out / "IMvigor210_composition_diagnostics.tsv", sep="\t", index=False, na_rep="NA")
     coefficients.to_csv(out / "IMvigor210_composition_coefficients.tsv", sep="\t", index=False)
 

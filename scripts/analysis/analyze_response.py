@@ -44,7 +44,7 @@ def fit_models(expr, meta, signatures, cohort):
             "cohort": cohort,
             "feature": feature,
             **fit_binary_response_feature(frame, feature),
-            "auc_ci": bootstrap_auc(sub.response, sub[feature]),
+            "auc_response_ci": bootstrap_auc(sub.response, sub[feature]),
         })
     result = pd.DataFrame(rows)
     result["fdr_logistic"] = bh_fdr(result.p_logistic)

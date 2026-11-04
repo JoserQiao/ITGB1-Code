@@ -47,10 +47,10 @@ def figure1(root, out, source):
     gs = fig.add_gridspec(2, 2, height_ratios=[.8, 1.25])
 
     ax = fig.add_subplot(gs[0, :]); ax.axis("off"); panel(ax, "A")
-    boxes = [(0.01, "Single-cell source\nHNSCC, 4 paired patients", "#D9EAF7"),
-             (0.205, "Bulk composition\n6 cohorts, n=311", "#DDF1E8"),
+    boxes = [(0.01, "Single-cell source\n2 HNSCC cohorts", "#D9EAF7"),
+             (0.205, "Composition evidence\n6 bulk + TCGA pathology", "#DDF1E8"),
              (0.40, "Clinical response\n5 ICI cohorts, n=477", "#F5E3D3"),
-             (0.595, "External pathways\n3 solid-tumour cohorts", "#F8E7A8"),
+             (0.595, "External validation\npathways + CPTAC protein", "#F8E7A8"),
              (0.79, "Pharmacogenomics\nlineage-aware GDSC", "#EDE2F2")]
     for x, txt, color in boxes:
         patch = FancyBboxPatch((x, .27), .17, .45, boxstyle="round,pad=.012,rounding_size=.02",
@@ -170,9 +170,9 @@ def figure3(root,out,source):
     cohorts=["GSE91061","GSE78220","GSE176307","GSE126044","IMvigor210"]; offsets=np.linspace(-.28,.28,5)
     for off,c in zip(offsets,cohorts):
         d=response[response.cohort.eq(c)].set_index("feature").loc[FEATURES]
-        ax.plot(np.arange(5)+off,d.auc_discrimination,'o-',color=COLORS[c],lw=1,ms=4,label=c)
+        ax.plot(np.arange(5)+off,d.auc_resistance_direction,'o-',color=COLORS[c],lw=1,ms=4,label=c)
     ax.axhline(.5,color="#555",ls="--",lw=.8);ax.set_xticks(np.arange(5),["Unadjusted","CAF/ECM","Endothelial","Stromal/vascular","Full"],rotation=25,ha="right")
-    ax.set_ylabel("Direction-free AUC");ax.set_ylim(.45,.82);ax.set_title("Cohort-specific discrimination")
+    ax.set_ylabel("AUC for non-response (prespecified direction)");ax.set_ylim(.20,.82);ax.set_title("Cohort-specific discrimination")
     ax.legend(title="ICI cohort",frameon=False,ncol=2,loc="upper left");clean(ax,"y")
 
     ax=axes[1,1];panel(ax,"D")
@@ -226,10 +226,10 @@ def figure_s2(root,out,source):
     fig,axes=plt.subplots(2,2,figsize=(10.5,8),constrained_layout=True);ici=["GSE91061","GSE78220","GSE176307","GSE126044"];offs=np.linspace(-.21,.21,4)
     ax=axes[0,0];panel(ax,"A")
     for off,c in zip(offs,ici):
-        d=auc[(auc.cohort.eq(c))&auc.estimand.eq("auc_oriented_to_original_ITGB1")].set_index("feature").loc[FEATURES]
+        d=auc[(auc.cohort.eq(c))&auc.estimand.eq("auc_resistance_direction")].set_index("feature").loc[FEATURES]
         x=np.arange(5)+off;ax.errorbar(x,d.estimate,yerr=[d.estimate-d.ci_low,d.ci_high-d.estimate],fmt='o-',color=COLORS[c],capsize=2,ms=4,label=c)
     ax.axhline(.5,color="#555",ls="--",lw=.8);ax.set_xticks(np.arange(5),["Unadjusted","CAF/ECM","Endothelial","Stromal/vascular","Full"],rotation=25,ha="right")
-    ax.set_ylabel("AUC oriented to original ITGB1 direction");ax.set_title("Bootstrap AUC estimates");ax.legend(title="Cohort/endpoint",frameon=False,loc="lower left");clean(ax,"y")
+    ax.set_ylabel("AUC for non-response (prespecified direction)");ax.set_title("Bootstrap AUC estimates");ax.legend(title="Cohort/endpoint",frameon=False,loc="lower left");clean(ax,"y")
     ax=axes[0,1];panel(ax,"B")
     deltas=auc[auc.estimand.eq("auc_difference_vs_unadjusted")];adj=FEATURES[1:]
     for off,c in zip(offs,ici):
@@ -238,10 +238,10 @@ def figure_s2(root,out,source):
     ax.axvline(0,color="#555",ls="--",lw=.8);ax.set_yticks(np.arange(4),FEATURE_LABELS[1:]);ax.set_xlabel("AUC difference versus unadjusted ITGB1 (95% interval)")
     ax.set_title("Paired bootstrap AUC change");ax.legend(title="Cohort/endpoint",frameon=False,loc="lower right");clean(ax,"x")
     ax=axes[1,0];panel(ax,"C")
-    d=auc[(auc.cohort.eq("GSE190826"))&auc.estimand.eq("auc_oriented_to_original_ITGB1")].set_index("feature").loc[FEATURES]
+    d=auc[(auc.cohort.eq("GSE190826"))&auc.estimand.eq("auc_resistance_direction")].set_index("feature").loc[FEATURES]
     ax.errorbar(np.arange(5),d.estimate,yerr=[d.estimate-d.ci_low,d.ci_high-d.estimate],fmt='o-',color=COLORS["GSE190826"],capsize=2,ms=4,label="GSE190826 pCR")
     ax.axhline(.5,color="#555",ls="--",lw=.8);ax.set_xticks(np.arange(5),["Unadjusted","CAF/ECM","Endothelial","Stromal/vascular","Full"],rotation=25,ha="right")
-    ax.set_ylabel("AUC oriented to original ITGB1 direction");ax.set_title("Independent chemoradiotherapy endpoint");ax.legend(title="Endpoint",frameon=False);clean(ax,"y")
+    ax.set_ylabel("AUC for non-pCR (prespecified direction)");ax.set_title("Independent chemoradiotherapy endpoint");ax.legend(title="Endpoint",frameon=False);clean(ax,"y")
     ax=axes[1,1];panel(ax,"D")
     d=auc[(auc.cohort.eq("GSE190826"))&auc.estimand.eq("auc_difference_vs_unadjusted")].set_index("feature").loc[FEATURES[1:]];y=np.arange(4)
     ax.errorbar(d.estimate,y,xerr=[d.estimate-d.ci_low,d.ci_high-d.estimate],fmt='o',color=COLORS["GSE190826"],capsize=2,ms=4,label="GSE190826 pCR")

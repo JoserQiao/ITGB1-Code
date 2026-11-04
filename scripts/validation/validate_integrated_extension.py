@@ -64,6 +64,40 @@ def main() -> None:
     valid_fdr = gdsc[fdr_columns].apply(lambda x: x.between(0, 1) | x.isna()).all().all()
     record(rows, "GDSC FDR range", valid_fdr, f"columns={','.join(fdr_columns)}")
 
+    clinical = pd.read_csv(
+        root / "results/clinical_response/five_ici_cohort_response_results.tsv", sep="\t"
+    )
+    record(rows, "Clinical AUC uses prespecified resistance direction",
+           "auc_discrimination" not in clinical.columns
+           and "auc_resistance_direction" in clinical.columns
+           and np.allclose(clinical.auc_response_direction + clinical.auc_resistance_direction, 1),
+           "response and resistance AUCs must sum to one; no direction-free maximum is allowed")
+    meta = pd.read_csv(
+        root / "results/clinical_response/random_effects_meta_analysis.tsv", sep="\t"
+    )
+    record(rows, "Primary clinical meta-analysis uses REML",
+           meta.method.str.startswith("REML").all(),
+           f"methods={','.join(meta.method.unique())}")
+
+    gse103322 = pd.read_csv(
+        root / "results/single_cell/GSE103322_patient_celltype_ITGB1.tsv", sep="\t"
+    )
+    record(rows, "GSE103322 independent single-cell patients",
+           gse103322.patient_id.nunique() == 18,
+           f"patients={gse103322.patient_id.nunique()}")
+    pathology = pd.read_csv(
+        root / "results/pathology_purity/TCGA_ITGB1_pathology_meta.tsv", sep="\t"
+    )
+    record(rows, "TCGA pathology validation covers ten cancers",
+           pathology.k_lineages.eq(10).all(),
+           f"k={','.join(pathology.k_lineages.astype(str))}")
+    protein = pd.read_csv(
+        root / "results/protein_validation/CPTAC_ITGB1_RNA_protein_correlations.tsv", sep="\t"
+    )
+    record(rows, "CPTAC RNA-protein validation covers seven studies",
+           len(protein) == 7 and protein.n.sum() == 728,
+           f"studies={len(protein)}; paired_samples={protein.n.sum()}")
+
     external = pd.read_csv(
         root / "results/external_solid_tumor/external_pathway_associations.tsv", sep="\t"
     )

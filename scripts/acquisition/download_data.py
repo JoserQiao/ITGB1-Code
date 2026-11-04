@@ -61,7 +61,10 @@ def main() -> None:
             continue
         # Paged Cell Model Passports endpoints are handled by download_cmp.py,
         # which preserves JSON:API pagination and included tissue resources.
-        if rec["role"].startswith("pharmacogenomic_"):
+        if (rec["role"].startswith("pharmacogenomic_")
+                or rec["role"] in {"single_cell_external_validation",
+                                   "pathology_composition_validation",
+                                   "protein_validation"}):
             continue
         dest = root / rec["local_path"]
         if rec["source_url"].endswith(".git"):

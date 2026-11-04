@@ -10,7 +10,7 @@ from scripts.core.cli import parse_project_root
 
 URL = (
     "https://raw.githubusercontent.com/BioInfoCloud/"
-    "IMvigor210CoreBiologies/master/data/cds.RData"
+    "IMvigor210CoreBiologies/3acc2c3c1a477fea6dfef10a152d73a75ac609d5/data/cds.RData"
 )
 
 

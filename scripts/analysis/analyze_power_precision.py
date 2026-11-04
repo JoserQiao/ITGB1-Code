@@ -11,7 +11,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+from scipy.stats import norm, t as student_t
 
 from scripts.core.cli import parse_project_root
 
@@ -46,6 +46,62 @@ def power_for_effect(effect: np.ndarray, se: float) -> np.ndarray:
     return norm.cdf(-critical - noncentrality) + 1 - norm.cdf(critical - noncentrality)
 
 
+def meta_analytic_power_simulation(replicates=20000, seed=20261102):
+    """Simulate the actual five-cohort meta-analytic design.
+
+    Cohort-specific log-OR standard errors use each observed sample size and
+    response fraction. Between-cohort heterogeneity is prespecified on the
+    log-OR scale. Modified Hartung-Knapp inference is then applied using the
+    corresponding random-effects weights. This avoids treating n=477 as one
+    homogeneous cohort.
+    """
+    rng = np.random.default_rng(seed)
+    clinical = [row for row in DESIGNS if row[0] in {
+        "GSE91061", "GSE78220", "GSE176307", "GSE126044", "IMvigor210"
+    }]
+    se = np.asarray([standard_error(total, events, measure)
+                     for _, _, total, events, measure in clinical])
+    k = len(se)
+    df = k - 1
+    critical = student_t.ppf(1 - ALPHA / 2, df)
+    effects = np.round(np.arange(1.0, 2.505, 0.025), 3)
+    rows = []
+    for tau in [0.0, 0.10, 0.20]:
+        weights = 1 / (se ** 2 + tau ** 2)
+        weight_sum = weights.sum()
+        for effect in effects:
+            beta = np.log(effect)
+            heterogeneity = rng.normal(0, tau, size=(replicates, k))
+            sampling = rng.normal(0, se, size=(replicates, k))
+            estimates = beta + heterogeneity + sampling
+            pooled = np.sum(estimates * weights, axis=1) / weight_sum
+            scale = np.sum(weights * (estimates - pooled[:, None]) ** 2, axis=1) / df
+            scale = np.maximum(1.0, scale)
+            pooled_se = np.sqrt(scale / weight_sum)
+            statistic = np.abs(pooled / pooled_se)
+            power = np.mean(statistic > critical)
+            rows.append({
+                "true_or_magnitude": effect,
+                "tau_log_or": tau,
+                "replicates": replicates,
+                "power": power,
+                "method": "five-cohort normal-approximation simulation; modified Hartung-Knapp",
+            })
+    curves = pd.DataFrame(rows)
+    mde_rows = []
+    for tau, group in curves.groupby("tau_log_or"):
+        eligible = group[group.power.ge(TARGET_POWER)]
+        mde_rows.append({
+            "tau_log_or": tau,
+            "target_power": TARGET_POWER,
+            "simulated_minimum_detectable_or_magnitude": (
+                eligible.true_or_magnitude.iloc[0] if len(eligible) else np.nan
+            ),
+            "replicates_per_effect": replicates,
+        })
+    return curves, pd.DataFrame(mde_rows)
+
+
 def main() -> None:
     root, _ = parse_project_root()
     z = norm.ppf(1 - ALPHA / 2) + norm.ppf(TARGET_POWER)
@@ -69,6 +125,9 @@ def main() -> None:
     output = root / "results/power_precision"
     output.mkdir(parents=True, exist_ok=True)
     table.to_csv(output / "minimum_detectable_effects.tsv", sep="\t", index=False)
+    curves, simulated_mde = meta_analytic_power_simulation()
+    curves.to_csv(output / "five_cohort_meta_simulation_power.tsv", sep="\t", index=False)
+    simulated_mde.to_csv(output / "five_cohort_meta_simulation_mde.tsv", sep="\t", index=False)
 
     figure_dir = root / "figures"
     figure_dir.mkdir(parents=True, exist_ok=True)
@@ -88,21 +147,16 @@ def main() -> None:
     axes[0].set_title("A  Two-sided 80% detectable effects")
     axes[0].grid(axis="x", color="#E5E5E5", linewidth=0.7)
 
-    effects = np.linspace(1.0, 4.8, 250)
-    for name, color in [
-        ("GSE126044", "#B279A2"),
-        ("GSE176307", "#59A14F"),
-        ("IMvigor210", "#E15759"),
-        ("Five-cohort total", "#4E79A7"),
-    ]:
-        row = table[table.cohort_or_pool.eq(name)].iloc[0]
-        axes[1].plot(effects, power_for_effect(effects, row.approx_log_effect_se), label=name, color=color)
+    for tau, color in [(0.0, "#4E79A7"), (0.10, "#59A14F"), (0.20, "#B279A2")]:
+        group = curves[curves.tau_log_or.eq(tau)]
+        axes[1].plot(group.true_or_magnitude, group.power,
+                     label=f"tau(log OR) = {tau:.2f}", color=color)
     axes[1].axhline(TARGET_POWER, color="#555555", linestyle="--", linewidth=0.8)
     axes[1].set_ylim(0, 1.02)
-    axes[1].set_xlim(1, 4.8)
-    axes[1].set_xlabel("True OR per 1-SD higher ITGB1")
-    axes[1].set_ylabel("Approximate power")
-    axes[1].set_title("B  Precision gained from the larger cohort")
+    axes[1].set_xlim(1, 2.5)
+    axes[1].set_xlabel("True OR magnitude per 1-SD higher ITGB1")
+    axes[1].set_ylabel("Simulated meta-analytic power")
+    axes[1].set_title("B  Five-cohort design under heterogeneity")
     axes[1].legend(frameon=False, fontsize=8)
     axes[1].grid(color="#E5E5E5", linewidth=0.7)
     for axis in axes:

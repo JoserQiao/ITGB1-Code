@@ -40,6 +40,9 @@ try {
     Invoke-PipelineStep 'scripts.acquisition.download_cmp'
     Invoke-PipelineStep 'scripts.acquisition.download_external_solid_tumor'
     Invoke-PipelineStep 'scripts.acquisition.download_imvigor210'
+    Invoke-PipelineStep 'scripts.acquisition.download_gse103322_xena'
+    Invoke-PipelineStep 'scripts.acquisition.download_tcga_pathology_purity'
+    Invoke-PipelineStep 'scripts.acquisition.download_cptac_itgb1'
 
     # 2. Cohort preprocessing
     Invoke-PipelineStep 'scripts.preprocessing.prepare_geo'
@@ -60,8 +63,12 @@ try {
     Invoke-PipelineStep 'scripts.analysis.analyze_rectal_response'
     Invoke-PipelineStep 'scripts.analysis.analyze_single_cell'
     Invoke-PipelineStep 'scripts.analysis.analyze_imvigor210'
+    Invoke-PipelineStep 'scripts.analysis.analyze_imvigor210_validation' @('--repeats', '100')
     Invoke-PipelineStep 'scripts.analysis.analyze_external_ici'
     Invoke-PipelineStep 'scripts.analysis.analyze_power_precision'
+    Invoke-PipelineStep 'scripts.analysis.analyze_gse103322_single_cell'
+    Invoke-PipelineStep 'scripts.analysis.analyze_tcga_pathology_purity'
+    Invoke-PipelineStep 'scripts.analysis.analyze_cptac_itgb1'
     Invoke-PipelineStep 'scripts.analysis.analyze_gdsc_lineage_adjusted'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_solid_tumor'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_marker_controls'
@@ -75,6 +82,7 @@ try {
     # 5. Figures
     Invoke-PipelineStep 'scripts.visualization.plot_all_figures_ordered'
     Invoke-PipelineStep 'scripts.visualization.plot_integrated_extension'
+    Invoke-PipelineStep 'scripts.visualization.plot_strengthening_analyses'
 }
 finally {
     Pop-Location

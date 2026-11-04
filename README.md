@@ -2,7 +2,7 @@
 
 This repository reproduces the manuscript:
 
-> Cellular origins, stromal confounding and context-dependent drug-sensitivity associations of bulk ITGB1 across cancers
+> Cellular sources, composition dependence and context-specific drug-sensitivity associations of bulk ITGB1 in public cancer datasets
 
 ## Questions addressed
 
@@ -10,16 +10,20 @@ This repository reproduces the manuscript:
 2. How much bulk `ITGB1` variation is associated with transcriptomic composition?
 3. Does `ITGB1` predict objective response, progression-free survival, or pathological complete response after composition adjustment?
 4. Does `ITGB1` add discrimination beyond established clinical variables in a larger ICI cohort?
-5. Which external pathway and GDSC associations remain after composition or cancer-lineage adjustment?
+5. Do direct pathology estimates and CPTAC protein measurements support the transcript-based interpretation?
+6. Which external pathway and GDSC associations remain after composition or cancer-lineage adjustment?
 
 ## Evidence layers
 
 - GSE195832: paired single-cell source attribution.
+- GSE103322: independent patient-level single-cell source validation (5,902 annotated cells, 18 patients).
 - GSE91061, GSE78220, GSE176307, GSE126044 and IMvigor210: pretreatment ICI objective response (total n=477).
 - IMvigor210 additionally supports clinical-baseline and TMB-adjusted incremental-value analyses.
 - GSE135222: ICI progression-free survival.
 - GSE190826: neoadjuvant chemoradiotherapy pathological complete response.
 - GSE172356, GSE113255 and GSE76427: continuous composition-aware pathway validation.
+- Ten TCGA cancers: pathologist-estimated stromal, tumour-cell and tumour-nuclei percentages matched to ITGB1 expression.
+- Seven CPTAC studies: paired ITGB1 RNA and mass-spectrometry protein abundance.
 - Cell Model Passports/GDSC: 14 prespecified cytotoxic drugs with duplicate-assay control, lineage fixed effects, within-lineage random effects and leave-one-lineage-out sensitivity analysis.
 
 ## Reproduce the workflow
@@ -53,10 +57,12 @@ See `R_DEPENDENCIES.md` for the exact R setup and version check.
 - One analysis record per patient.
 - Cells are nested within patients; clinical inference is patient level.
 - Continuous standardized `ITGB1` in primary models; no median split for clinical inference.
+- Higher `ITGB1` is prespecified as the nonresponse AUC direction; AUCs are never flipped by cohort.
+- IMvigor210 incremental models use 100 repeated stratified five-fold validations and missing-indicator sensitivity analyses.
 - Minimum detectable effects are design-based approximations; observed post-hoc power is not reported.
 - `ITGB1` and each control marker are excluded from their own signatures.
 - Transcriptomic composition scores are proxies, not DNA-derived purity estimates.
-- DerSimonian-Laird tau-squared with modified Hartung-Knapp confidence intervals for small-k meta-analysis.
+- REML tau-squared with modified Hartung-Knapp inference; DerSimonian-Laird and leave-one-cohort-out estimates are sensitivity analyses.
 - Duplicate GDSC assays are selected by sample coverage before association testing.
 - GDSC lineage labels come from Cell Model Passports sample/tissue metadata; DepMap is not used.
 - FDR is controlled within prespecified analysis families.
@@ -64,4 +70,4 @@ See `R_DEPENDENCIES.md` for the exact R setup and version check.
 
 ## Main result
 
-Bulk `ITGB1` is composition sensitive and does not show stable stand-alone clinical-response discrimination. Adding IMvigor210 expanded objective-response evidence to 477 patients, produced no measurable incremental value beyond clinical variables or TMB, and improved the idealized 80%-power detectable OR from 1.62 to 1.35. Composition and tissue-lineage adjustment attenuate pathway and drug-sensitivity associations; oxaliplatin is the only drug with FDR-significant within-lineage replication and remains a hypothesis for experimental testing rather than a causal resistance claim.
+Bulk `ITGB1` is a composition-sensitive, multicellular abundance marker and does not show stable stand-alone clinical-response discrimination. Direct TCGA pathology estimates show small stromal and tumour-content associations, while seven CPTAC studies show moderate RNA-protein correspondence. Five-cohort simulation indicates that 80% power requires an OR magnitude of about 1.55 without heterogeneity and 1.68-1.90 under increasing heterogeneity. Oxaliplatin is the only GDSC drug with FDR-significant within-dataset cross-lineage support and is not interpreted as independent replication or causal resistance.

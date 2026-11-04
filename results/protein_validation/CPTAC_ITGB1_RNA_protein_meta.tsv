@@ -1,0 +1,2 @@
+k_lineages	meta_rho	meta_ci_low	meta_ci_high	meta_p_value	tau_squared	i_squared	hk_scale	df	meta_method
+7	0.5701974013292778	0.4309487805876922	0.6829218933357861	0.0001462911255603332	0.028253364319271945	73.92171297691958	1.060721935085015	6	DerSimonian-Laird tau2; modified Hartung-Knapp CI

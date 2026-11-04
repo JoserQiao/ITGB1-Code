@@ -72,7 +72,7 @@ def fit_binary_response_feature(frame: pd.DataFrame, feature: str) -> dict[str, 
         family=sm.families.Binomial(),
     ).fit()
     confidence_interval = model.conf_int().loc[feature]
-    auc = roc_auc_score(data.response, data[feature])
+    auc_response = roc_auc_score(data.response, data[feature])
     p_mann_whitney = mannwhitneyu(
         data.loc[data.response.eq(1), feature],
         data.loc[data.response.eq(0), feature],
@@ -86,8 +86,8 @@ def fit_binary_response_feature(frame: pd.DataFrame, feature: str) -> dict[str, 
         "ci_high": float(np.exp(confidence_interval.iloc[1])),
         "p_logistic": float(model.pvalues[feature]),
         "p_mann_whitney": float(p_mann_whitney),
-        "auc_raw_direction": float(auc),
-        "auc_discrimination": float(max(auc, 1 - auc)),
+        "auc_response_direction": float(auc_response),
+        "auc_resistance_direction": float(1 - auc_response),
     }
 
 

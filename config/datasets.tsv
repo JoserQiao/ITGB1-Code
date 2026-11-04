@@ -6,7 +6,7 @@ GSE91061_FPKM	anti_pd1_discovery	Melanoma	nivolumab	RECIST_response	https://ftp.
 GSE91061_MINIML	anti_pd1_metadata	Melanoma	nivolumab	RECIST_response	https://ftp.ncbi.nlm.nih.gov/geo/series/GSE91nnn/GSE91061/miniml/GSE91061_family.xml.tgz	data/raw/GSE91061/GSE91061_family.xml.tgz
 GSE78220_MINIML	anti_pd1_metadata	Melanoma	anti-PD-1	RECIST_response	https://ftp.ncbi.nlm.nih.gov/geo/series/GSE78nnn/GSE78220/miniml/GSE78220_family.xml.tgz	data/raw/GSE78220/GSE78220_family.xml.tgz
 GSE190826_MINIML	cross_treatment_metadata	Rectal_cancer	neoadjuvant_chemoradiotherapy	pathologic_complete_response	https://ftp.ncbi.nlm.nih.gov/geo/series/GSE190nnn/GSE190826/miniml/GSE190826_family.xml.tgz	data/raw/GSE190826/GSE190826_family.xml.tgz
-IMVIGOR210_CDS	ici_external_validation	Urothelial_cancer	atezolizumab	objective_response	https://raw.githubusercontent.com/BioInfoCloud/IMvigor210CoreBiologies/master/data/cds.RData	data/raw/IMvigor210/cds.RData
+IMVIGOR210_CDS	ici_external_validation	Urothelial_cancer	atezolizumab	objective_response	https://raw.githubusercontent.com/BioInfoCloud/IMvigor210CoreBiologies/3acc2c3c1a477fea6dfef10a152d73a75ac609d5/data/cds.RData	data/raw/IMvigor210/cds.RData
 MSIGDB_HALLMARK_2025_1	pathway_definitions	Human	NA	continuous_pathway_scores	https://data.broadinstitute.org/gsea-msigdb/msigdb/release/2025.1.Hs/h.all.v2025.1.Hs.symbols.gmt	data/raw/gene_sets/h.all.v2025.1.Hs.symbols.gmt
 CMP_ITGB1_RNASEQ	pharmacogenomic_expression	Cancer_cell_lines	NA	ITGB1_TPM	https://api.cellmodelpassports.sanger.ac.uk/genes/SIDG13308/datasets/rnaseq	data/raw/CellModelPassports/ITGB1_rnaseq.json
 CMP_SAMPLES	pharmacogenomic_lineage	Cancer_cell_lines	NA	tissue_lineage	https://api.cellmodelpassports.sanger.ac.uk/samples	data/raw/CellModelPassports/samples.json
@@ -25,3 +25,9 @@ GSE113255_MATRIX	external_pathway_metadata	Gastric_cancer	NA	tumor_annotation	ht
 GSE113255_EXPR	external_pathway_validation	Gastric_cancer	NA	tumor_expression	https://ftp.ncbi.nlm.nih.gov/geo/series/GSE113nnn/GSE113255/suppl/GSE113255_RAW.tar	data/raw/external_solid_tumor/GSE113255_RAW.tar
 GSE76427_MATRIX	external_pathway_validation	Hepatocellular_carcinoma	NA	primary_tumor_expression	https://ftp.ncbi.nlm.nih.gov/geo/series/GSE76nnn/GSE76427/matrix/GSE76427_series_matrix.txt.gz	data/raw/external_solid_tumor/GSE76427_series_matrix.txt.gz
 GPL10558_ANNOTATION	platform_annotation	Human	NA	probe_to_gene	https://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL10nnn/GPL10558/annot/GPL10558.annot.gz	data/raw/external_solid_tumor/GPL10558.annot.gz
+GSE103322_XENA_METADATA	single_cell_external_validation	HNSCC	NA	cell_type_annotation	https://ucscpublic.xenahubs.net/download/HNSCC/GSE103322_cell_metadata.txt	data/raw/GSE103322/GSE103322_cell_metadata.txt
+GSE103322_XENA_SAMPLE_METADATA	single_cell_external_validation	HNSCC	NA	patient_and_tumor_site_annotation	https://ucscpublic.xenahubs.net/download/HNSCC/GSE103322_sample_metadata.txt	data/raw/GSE103322/GSE103322_sample_metadata.txt
+GSE103322_XENA_ITGB1	single_cell_external_validation	HNSCC	NA	ITGB1_expression	https://ucscpublic.xenahubs.net/HNSCC/GSE103322_HNSCC_exp.txt	data/processed/GSE103322/itgb1_expression.tsv
+TCGA_GDC_PATHOLOGY	pathology_composition_validation	Ten_TCGA_cancers	NA	percent_tumor_nuclei_and_stromal_cells	https://api.gdc.cancer.gov/cases	data/raw/TCGA_pathology_purity
+CPTAC_CBIOPORTAL_ITGB1	protein_validation	Seven_CPTAC_cancers	NA	paired_RNA_and_mass_spectrometry_protein	https://www.cbioportal.org/api	data/processed/CPTAC_ITGB1/CPTAC_ITGB1_RNA_protein.tsv
+TCGA_XENA_ITGB1	pathology_composition_validation	Ten_TCGA_cancers	NA	ITGB1_expression	https://tcga.xenahubs.net	data/processed/TCGA_pathology_purity/TCGA_ITGB1_pathology_combined.tsv

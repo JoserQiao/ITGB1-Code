@@ -1,0 +1,35 @@
+definition	variable	level	complete_n	incomplete_n	complete_summary	incomplete_summary	test	p_value
+clinical_complete_case	response	binary	270	28	52/270 (19.3%)	16/28 (57.1%)	Fisher exact	3.570717182000835e-05
+clinical_complete_case	ITGB1	continuous	270	28	median=14.68; IQR=14.29-15.14	median=14.68; IQR=14.51-15.04	Mann-Whitney	0.7098139388471323
+clinical_complete_case	ITGB1_residual_FullComposition	continuous	270	28	median=-0.02763; IQR=-0.3237-0.3307	median=-0.05743; IQR=-0.2858-0.3916	Mann-Whitney	0.7919224134641746
+clinical_complete_case	log1p_TMB	continuous	210	24	median=2.138; IQR=1.792-2.708	median=2.35; IQR=1.946-3.008	Mann-Whitney	0.059837655306052485
+clinical_complete_case	ECOG	0	109	12	40.4%	42.9%	Chi-square	0.9643547624600671
+clinical_complete_case	ECOG	1	150	15	55.6%	53.6%	Chi-square	0.9643547624600671
+clinical_complete_case	ECOG	2	11	1	4.1%	3.6%	Chi-square	0.9643547624600671
+clinical_complete_case	IC_Level	IC0	80	3	29.6%	10.7%	Chi-square	0.003186419140817289
+clinical_complete_case	IC_Level	IC1	100	12	37.0%	42.9%	Chi-square	0.003186419140817289
+clinical_complete_case	IC_Level	IC2+	90	12	33.3%	42.9%	Chi-square	0.003186419140817289
+clinical_complete_case	IC_Level	Missing	0	1	0.0%	3.6%	Chi-square	0.003186419140817289
+clinical_complete_case	Sex	F	58	7	21.5%	25.0%	Chi-square	0.8502848450786067
+clinical_complete_case	Sex	M	212	21	78.5%	75.0%	Chi-square	0.8502848450786067
+clinical_complete_case	Met_Status	LN Only	51	0	18.9%	0.0%	Chi-square	9.003124253783723e-62
+clinical_complete_case	Met_Status	Liver	81	0	30.0%	0.0%	Chi-square	9.003124253783723e-62
+clinical_complete_case	Met_Status	Missing	0	27	0.0%	96.4%	Chi-square	9.003124253783723e-62
+clinical_complete_case	Met_Status	Visceral	138	1	51.1%	3.6%	Chi-square	9.003124253783723e-62
+TMB_complete_case	response	binary	210	88	47/210 (22.4%)	21/88 (23.9%)	Fisher exact	0.7646545423697181
+TMB_complete_case	ITGB1	continuous	210	88	median=14.67; IQR=14.27-15.12	median=14.77; IQR=14.4-15.23	Mann-Whitney	0.27710702189478953
+TMB_complete_case	ITGB1_residual_FullComposition	continuous	210	88	median=-0.02007; IQR=-0.3237-0.3307	median=-0.05743; IQR=-0.2936-0.3722	Mann-Whitney	0.8210378399273744
+TMB_complete_case	log1p_TMB	continuous	210	24	median=2.138; IQR=1.792-2.708	median=2.35; IQR=1.946-3.008	Mann-Whitney	0.059837655306052485
+TMB_complete_case	ECOG	0	85	36	40.5%	40.9%	Chi-square	0.2535301713150106
+TMB_complete_case	ECOG	1	114	51	54.3%	58.0%	Chi-square	0.2535301713150106
+TMB_complete_case	ECOG	2	11	1	5.2%	1.1%	Chi-square	0.2535301713150106
+TMB_complete_case	IC_Level	IC0	51	32	24.3%	36.4%	Chi-square	0.04453429106770185
+TMB_complete_case	IC_Level	IC1	80	32	38.1%	36.4%	Chi-square	0.04453429106770185
+TMB_complete_case	IC_Level	IC2+	79	23	37.6%	26.1%	Chi-square	0.04453429106770185
+TMB_complete_case	IC_Level	Missing	0	1	0.0%	1.1%	Chi-square	0.04453429106770185
+TMB_complete_case	Sex	F	43	22	20.5%	25.0%	Chi-square	0.4783923391907071
+TMB_complete_case	Sex	M	167	66	79.5%	75.0%	Chi-square	0.4783923391907071
+TMB_complete_case	Met_Status	LN Only	38	13	18.1%	14.8%	Chi-square	1.4718217675164468e-15
+TMB_complete_case	Met_Status	Liver	60	21	28.6%	23.9%	Chi-square	1.4718217675164468e-15
+TMB_complete_case	Met_Status	Missing	0	27	0.0%	30.7%	Chi-square	1.4718217675164468e-15
+TMB_complete_case	Met_Status	Visceral	112	27	53.3%	30.7%	Chi-square	1.4718217675164468e-15

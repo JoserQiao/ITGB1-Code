@@ -21,3 +21,8 @@ GDSC estimates finite	True	nonfinite=0
 GDSC FDR range	True	columns=global_fdr,lineage_adjusted_fdr,meta_fdr
 External pathway result grid complete	True	observed_rows=30; expected_rows=30
 External pathway FDR range	True	all adjusted P values must be within [0,1]
+Clinical AUC uses prespecified resistance direction	True	response and resistance AUCs sum to one; no direction-free maximum
+Primary clinical meta-analysis uses REML	True	REML tau2; modified Hartung-Knapp CI
+GSE103322 independent single-cell patients	True	patients=18
+TCGA pathology validation covers ten cancers	True	k=10 for all pathology variables
+CPTAC RNA-protein validation covers seven studies	True	studies=7; paired_samples=728

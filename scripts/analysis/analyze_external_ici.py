@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import minimize_scalar
 from scipy.stats import t as student_t
 from statsmodels.duration.hazard_regression import PHReg
 
@@ -31,8 +32,32 @@ def survival_analysis(expr, meta, signatures, cohort):
     return frame, pd.DataFrame(rows), diagnostics, coefficients
 
 
-def random_effects_meta(response: pd.DataFrame) -> pd.DataFrame:
-    """DerSimonian-Laird tau2 with modified Hartung-Knapp inference."""
+def estimate_tau_squared(yi, vi, method="REML"):
+    if method == "DL":
+        wi = 1 / vi
+        fixed = np.sum(wi * yi) / np.sum(wi)
+        q = np.sum(wi * (yi - fixed) ** 2)
+        df = len(yi) - 1
+        c = np.sum(wi) - np.sum(wi ** 2) / np.sum(wi)
+        return max(0.0, (q - df) / c) if c > 0 else 0.0
+    if method != "REML":
+        raise ValueError(f"Unknown tau-squared method: {method}")
+
+    def objective(tau2):
+        weights = 1 / (vi + tau2)
+        pooled = np.sum(weights * yi) / np.sum(weights)
+        return (np.sum(np.log(vi + tau2)) + np.log(np.sum(weights))
+                + np.sum(weights * (yi - pooled) ** 2))
+
+    upper = max(1.0, float(np.var(yi, ddof=1) * 10))
+    fit = minimize_scalar(objective, bounds=(0.0, upper), method="bounded",
+                          options={"xatol": 1e-12})
+    estimate = max(0.0, float(fit.x))
+    return 0.0 if estimate < 1e-10 else estimate
+
+
+def random_effects_meta(response: pd.DataFrame, tau_method="REML") -> pd.DataFrame:
+    """Random-effects pooling with modified Hartung-Knapp inference."""
     rows = []
     for feature, d in response.groupby("feature"):
         d = d[(d.ci_low > 0) & (d.ci_high > 0)].copy()
@@ -43,21 +68,42 @@ def random_effects_meta(response: pd.DataFrame) -> pd.DataFrame:
         fixed = np.sum(wi * yi) / np.sum(wi)
         q = np.sum(wi * (yi-fixed)**2)
         df = len(d)-1
-        c = np.sum(wi) - np.sum(wi**2)/np.sum(wi)
-        tau2 = max(0, (q-df)/c) if c > 0 else 0
+        tau2 = estimate_tau_squared(yi, vi, tau_method)
         wr = 1/(vi+tau2)
         pooled = np.sum(wr*yi)/np.sum(wr)
         hk_scale = max(1.0, np.sum(wr * (yi - pooled) ** 2) / df) if df > 0 else 1.0
         se = np.sqrt(hk_scale / np.sum(wr))
         critical = student_t.ppf(0.975, df) if df > 0 else 1.96
         p_value = 2 * student_t.sf(abs(pooled / se), df) if df > 0 else np.nan
+        prediction_se = np.sqrt(tau2 + se ** 2)
         rows.append({"feature": feature, "k": len(d), "pooled_or": np.exp(pooled),
                      "ci_low": np.exp(pooled-critical*se), "ci_high": np.exp(pooled+critical*se),
+                     "prediction_low": np.exp(pooled-critical*prediction_se),
+                     "prediction_high": np.exp(pooled+critical*prediction_se),
                      "p_value": p_value, "tau_squared": tau2,
                      "i_squared": max(0, (q-df)/q)*100 if q > 0 else 0,
                      "hk_scale": hk_scale, "df": df,
-                     "method": "DerSimonian-Laird tau2; modified Hartung-Knapp CI"})
+                     "method": f"{tau_method} tau2; modified Hartung-Knapp CI"})
     return pd.DataFrame(rows)
+
+
+def meta_sensitivity(response: pd.DataFrame) -> pd.DataFrame:
+    tables = []
+    for method in ["REML", "DL"]:
+        table = random_effects_meta(response, method)
+        table.insert(0, "tau_method", method)
+        tables.append(table)
+    return pd.concat(tables, ignore_index=True)
+
+
+def leave_one_cohort_out_meta(response: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for omitted in sorted(response.cohort.unique()):
+        reduced = response[response.cohort.ne(omitted)]
+        table = random_effects_meta(reduced, "REML")
+        table.insert(0, "omitted_cohort", omitted)
+        rows.append(table)
+    return pd.concat(rows, ignore_index=True)
 
 
 def main() -> None:
@@ -98,7 +144,12 @@ def main() -> None:
         imvigor = pd.read_csv(imvigor_path, sep="\t")
         combined = pd.concat([combined, imvigor[imvigor.feature.isin(ITGB1_FEATURES)]], ignore_index=True)
     combined.to_csv(out / "five_ici_cohort_response_results.tsv", sep="\t", index=False, na_rep="NA")
-    random_effects_meta(combined).to_csv(out / "random_effects_meta_analysis.tsv", sep="\t", index=False)
+    random_effects_meta(combined, "REML").to_csv(
+        out / "random_effects_meta_analysis.tsv", sep="\t", index=False)
+    meta_sensitivity(combined).to_csv(
+        out / "random_effects_meta_sensitivity.tsv", sep="\t", index=False)
+    leave_one_cohort_out_meta(combined).to_csv(
+        out / "random_effects_meta_leave_one_cohort_out.tsv", sep="\t", index=False)
     pd.DataFrame(boot_rows).to_csv(out / "external_bootstrap_composition_r2.tsv", sep="\t", index=False)
     pd.DataFrame(cv_rows).to_csv(out / "external_cross_validated_composition_r2.tsv", sep="\t", index=False)
 
