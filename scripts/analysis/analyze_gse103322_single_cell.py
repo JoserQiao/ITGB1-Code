@@ -7,6 +7,7 @@ import pandas as pd
 from scipy.stats import wilcoxon
 
 from scripts.core.cli import parse_project_root
+from scripts.core.common import bh_fdr
 
 
 COMPARISONS = [
@@ -64,7 +65,9 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     patient.to_csv(out / "GSE103322_patient_celltype_ITGB1.tsv", sep="\t", index=False)
     summary.to_csv(out / "GSE103322_celltype_summary.tsv", sep="\t", index=False)
-    pd.DataFrame(comparisons).to_csv(
+    comparison_table = pd.DataFrame(comparisons)
+    comparison_table["fdr"] = bh_fdr(comparison_table.p_value)
+    comparison_table.to_csv(
         out / "GSE103322_paired_celltype_comparisons.tsv", sep="\t", index=False)
 
 

@@ -60,17 +60,21 @@ def main():
         rna = fetch_gene(rna_profile["molecularProfileId"], study)
         (raw / f"{study}_protein.json").write_text(json.dumps(protein), encoding="utf-8")
         (raw / f"{study}_rna.json").write_text(json.dumps(rna), encoding="utf-8")
-        protein_table = pd.DataFrame(protein)[["sampleId", "value"]].rename(
+        protein_table = pd.DataFrame(protein)[["sampleId", "patientId", "value"]].rename(
             columns={"value": "ITGB1_protein"})
-        rna_table = pd.DataFrame(rna)[["sampleId", "value"]].rename(
+        rna_table = pd.DataFrame(rna)[["sampleId", "patientId", "value"]].rename(
             columns={"value": "ITGB1_RNA"})
-        merged = rna_table.merge(protein_table, on="sampleId", how="inner")
+        merged = rna_table.merge(protein_table, on=["sampleId", "patientId"], how="inner")
+        if merged.patientId.duplicated().any():
+            raise RuntimeError(f"{study} contains multiple paired samples for one patient")
         merged.insert(0, "study", study)
         merged["rna_profile"] = rna_profile["molecularProfileId"]
         merged["protein_profile"] = protein_profile["molecularProfileId"]
         tables.append(merged)
         provenance.append({
             "study": study, "status": "included", "n": len(merged),
+            "unique_patients": merged.patientId.nunique(),
+            "sample_selection": "one paired tumour-profile sample per patient",
             "rna_profile": rna_profile["molecularProfileId"],
             "protein_profile": protein_profile["molecularProfileId"],
         })

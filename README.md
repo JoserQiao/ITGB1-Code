@@ -18,12 +18,12 @@ This repository reproduces the manuscript:
 - GSE195832: paired single-cell source attribution.
 - GSE103322: independent patient-level single-cell source validation (5,902 annotated cells, 18 patients).
 - GSE91061, GSE78220, GSE176307, GSE126044 and IMvigor210: pretreatment ICI objective response (total n=477).
-- IMvigor210 additionally supports clinical-baseline and TMB-adjusted incremental-value analyses.
+- IMvigor210 additionally supports clinical-baseline and TMB-adjusted incremental-value analyses, repeated cross-validation, missing-indicator sensitivity and 50-imputation missing-at-random sensitivity.
 - GSE135222: ICI progression-free survival.
 - GSE190826: neoadjuvant chemoradiotherapy pathological complete response.
 - GSE172356, GSE113255 and GSE76427: continuous composition-aware pathway validation.
 - Ten TCGA cancers: pathologist-estimated stromal, tumour-cell and tumour-nuclei percentages matched to ITGB1 expression.
-- Seven CPTAC studies: paired ITGB1 RNA and mass-spectrometry protein abundance.
+- Seven CPTAC studies: one paired tumour-profile ITGB1 RNA and mass-spectrometry protein sample per patient.
 - Cell Model Passports/GDSC: 14 prespecified cytotoxic drugs with duplicate-assay control, lineage fixed effects, within-lineage random effects and leave-one-lineage-out sensitivity analysis.
 
 ## Reproduce the workflow
@@ -58,8 +58,9 @@ See `R_DEPENDENCIES.md` for the exact R setup and version check.
 - Cells are nested within patients; clinical inference is patient level.
 - Continuous standardized `ITGB1` in primary models; no median split for clinical inference.
 - Higher `ITGB1` is prespecified as the nonresponse AUC direction; AUCs are never flipped by cohort.
-- IMvigor210 incremental models use 100 repeated stratified five-fold validations and missing-indicator sensitivity analyses.
-- Minimum detectable effects are design-based approximations; observed post-hoc power is not reported.
+- IMvigor210 incremental models use 100 repeated stratified five-fold validations, missing-indicator analyses and a 50-imputation predictive-mean-matching sensitivity analysis under a missing-at-random assumption.
+- Minimum detectable effects are design-based approximations. The five-cohort power curves use normal-approximation cohort log-OR estimates and fixed prespecified tau-based weights; tau is not re-estimated per replicate and observed post-hoc power is not reported.
+- `config/data_provenance.tsv` records source versions and SHA256 values; `scripts.validation.verify_data_provenance --strict` checks reconstructed local artifacts against that manifest.
 - `ITGB1` and each control marker are excluded from their own signatures.
 - Transcriptomic composition scores are proxies, not DNA-derived purity estimates.
 - REML tau-squared with modified Hartung-Knapp inference; DerSimonian-Laird and leave-one-cohort-out estimates are sensitivity analyses.

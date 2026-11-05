@@ -18,20 +18,22 @@ Run the complete workflow with `scripts/run_all.ps1`.
 14. `scripts.analysis.analyze_single_cell`
 15. `scripts.analysis.analyze_imvigor210`
 16. `scripts.analysis.analyze_imvigor210_validation`
-17. `scripts.analysis.analyze_external_ici`
-18. `scripts.analysis.analyze_power_precision`
-19. `scripts.analysis.analyze_gse103322_single_cell`
-20. `scripts.analysis.analyze_tcga_pathology_purity`
-21. `scripts.analysis.analyze_cptac_itgb1`
-22. `scripts.analysis.analyze_gdsc_lineage_adjusted`
-23. `scripts.analysis.analyze_external_solid_tumor`
-24. `scripts.analysis.analyze_external_marker_controls`
-25. `scripts.validation.robustness_analysis`
-26. `scripts.validation.extended_auc_bootstrap`
-27. `scripts.validation.alternative_mcpcounter`
-28. `scripts.validation.validate_integrated_extension`
-29. `scripts.visualization.plot_all_figures_ordered`
-30. `scripts.visualization.plot_integrated_extension`
-31. `scripts.visualization.plot_strengthening_analyses`
+17. `scripts.analysis.analyze_imvigor210_multiple_imputation`
+18. `scripts.analysis.analyze_external_ici`
+19. `scripts.analysis.analyze_power_precision`
+20. `scripts.analysis.analyze_gse103322_single_cell`
+21. `scripts.analysis.analyze_tcga_pathology_purity`
+22. `scripts.analysis.analyze_cptac_itgb1`
+23. `scripts.analysis.analyze_gdsc_lineage_adjusted`
+24. `scripts.analysis.analyze_external_solid_tumor`
+25. `scripts.analysis.analyze_external_marker_controls`
+26. `scripts.validation.verify_data_provenance --strict`
+27. `scripts.validation.robustness_analysis`
+28. `scripts.validation.extended_auc_bootstrap`
+29. `scripts.validation.alternative_mcpcounter`
+30. `scripts.validation.validate_integrated_extension`
+31. `scripts.visualization.plot_all_figures_ordered`
+32. `scripts.visualization.plot_integrated_extension`
+33. `scripts.visualization.plot_strengthening_analyses`
 
 Each command accepts `--project-root`. Analysis outputs are written to `results/`; figures are written to `figures/`.

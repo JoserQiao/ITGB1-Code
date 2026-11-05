@@ -58,12 +58,16 @@ try {
         (Join-Path $ProjectRoot 'data/processed/IMvigor210')
     if ($LASTEXITCODE -ne 0) { throw 'IMvigor210 R preprocessing failed.' }
 
+    # Verify every downloaded or generated input against the versioned manifest.
+    Invoke-PipelineStep 'scripts.validation.verify_data_provenance' @('--strict')
+
     # 3. Primary analyses
     Invoke-PipelineStep 'scripts.analysis.analyze_response'
     Invoke-PipelineStep 'scripts.analysis.analyze_rectal_response'
     Invoke-PipelineStep 'scripts.analysis.analyze_single_cell'
     Invoke-PipelineStep 'scripts.analysis.analyze_imvigor210'
     Invoke-PipelineStep 'scripts.analysis.analyze_imvigor210_validation' @('--repeats', '100')
+    Invoke-PipelineStep 'scripts.analysis.analyze_imvigor210_multiple_imputation' @('--imputations', '50')
     Invoke-PipelineStep 'scripts.analysis.analyze_external_ici'
     Invoke-PipelineStep 'scripts.analysis.analyze_power_precision'
     Invoke-PipelineStep 'scripts.analysis.analyze_gse103322_single_cell'

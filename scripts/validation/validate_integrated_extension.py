@@ -85,6 +85,12 @@ def main() -> None:
     record(rows, "GSE103322 independent single-cell patients",
            gse103322.patient_id.nunique() == 18,
            f"patients={gse103322.patient_id.nunique()}")
+    gse103322_tests = pd.read_csv(
+        root / "results/single_cell/GSE103322_paired_celltype_comparisons.tsv", sep="\t"
+    )
+    record(rows, "GSE103322 prespecified comparison FDR range",
+           len(gse103322_tests) == 2 and gse103322_tests.fdr.between(0, 1).all(),
+           f"comparisons={len(gse103322_tests)}")
     pathology = pd.read_csv(
         root / "results/pathology_purity/TCGA_ITGB1_pathology_meta.tsv", sep="\t"
     )
@@ -97,6 +103,21 @@ def main() -> None:
     record(rows, "CPTAC RNA-protein validation covers seven studies",
            len(protein) == 7 and protein.n.sum() == 728,
            f"studies={len(protein)}; paired_samples={protein.n.sum()}")
+    cptac_pairs = pd.read_csv(
+        root / "data/processed/CPTAC_ITGB1/CPTAC_ITGB1_RNA_protein.tsv", sep="\t"
+    )
+    record(rows, "CPTAC one paired sample per patient",
+           not cptac_pairs.duplicated(["study", "patientId"]).any(),
+           f"duplicate_study_patients={cptac_pairs.duplicated(['study', 'patientId']).sum()}")
+    record(rows, "CPTAC study-level FDR range", protein.fdr.between(0, 1).all(),
+           f"studies={len(protein)}")
+    imputed = pd.read_csv(
+        root / "results/clinical_response/IMvigor210_multiple_imputation_pooled.tsv", sep="\t"
+    )
+    record(rows, "IMvigor210 multiple-imputation result grid",
+           len(imputed) == 3 and imputed.imputations.eq(50).all()
+           and imputed[["odds_ratio", "ci_low", "ci_high", "p_value"]].notna().all().all(),
+           f"models={len(imputed)}; imputations={','.join(imputed.imputations.astype(str).unique())}")
 
     external = pd.read_csv(
         root / "results/external_solid_tumor/external_pathway_associations.tsv", sep="\t"

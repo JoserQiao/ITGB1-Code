@@ -14,5 +14,6 @@
 | Supplementary Figure S5 | Direct TCGA pathology-composition validation | `scripts.acquisition.download_tcga_pathology_purity`; `scripts.analysis.analyze_tcga_pathology_purity`; `scripts.visualization.plot_strengthening_analyses` |
 | Supplementary Figure S6 | IMvigor210 repeated cross-validation and missingness | `scripts.analysis.analyze_imvigor210_validation`; `scripts.visualization.plot_strengthening_analyses` |
 | Supplementary Figure S7 | CPTAC ITGB1 RNA-protein validation | `scripts.acquisition.download_cptac_itgb1`; `scripts.analysis.analyze_cptac_itgb1`; `scripts.visualization.plot_strengthening_analyses` |
+| Supplementary Table S8 | IMvigor210 cross-validation, missingness and multiple-imputation sensitivity | `scripts.analysis.analyze_imvigor210_validation`; `scripts.analysis.analyze_imvigor210_multiple_imputation` |
 
-All figures have corresponding machine-readable estimates in `results/`. Legacy GEPIA/HPA portal panels, GSE96058 summary models, the previous signature-counting Fisher test and the discovery-only coexpression panel are not part of the revised manuscript or repository workflow.
+All figures have corresponding machine-readable estimates in `results/`. The pipeline also verifies downloaded and generated inputs against `config/data_provenance.tsv`. Legacy GEPIA/HPA portal panels, GSE96058 summary models, the previous signature-counting Fisher test and the discovery-only coexpression panel are not part of the revised manuscript or repository workflow.

@@ -7,6 +7,7 @@ from scipy.stats import spearmanr
 
 from scripts.analysis.analyze_gdsc_lineage_adjusted import random_effects_fisher_z
 from scripts.core.cli import parse_project_root
+from scripts.core.common import bh_fdr
 
 
 def main():
@@ -21,6 +22,7 @@ def main():
         rho, p_value = spearmanr(data.ITGB1_RNA, data.ITGB1_protein)
         rows.append({"study": study, "n": len(data), "spearman_rho": rho, "p_value": p_value})
     associations = pd.DataFrame(rows)
+    associations["fdr"] = bh_fdr(associations.p_value)
     meta = random_effects_fisher_z(associations)
     out = root / "results/protein_validation"
     out.mkdir(parents=True, exist_ok=True)

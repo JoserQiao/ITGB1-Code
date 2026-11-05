@@ -47,13 +47,15 @@ def power_for_effect(effect: np.ndarray, se: float) -> np.ndarray:
 
 
 def meta_analytic_power_simulation(replicates=20000, seed=20261102):
-    """Simulate the actual five-cohort meta-analytic design.
+    """Simulate a normal approximation to the five-cohort meta-analytic design.
 
     Cohort-specific log-OR standard errors use each observed sample size and
     response fraction. Between-cohort heterogeneity is prespecified on the
     log-OR scale. Modified Hartung-Knapp inference is then applied using the
-    corresponding random-effects weights. This avoids treating n=477 as one
-    homogeneous cohort.
+    corresponding fixed tau-based random-effects weights. Tau is not
+    re-estimated in each replicate. This avoids treating n=477 as one
+    homogeneous cohort while remaining a design approximation rather than a
+    patient-level outcome simulation.
     """
     rng = np.random.default_rng(seed)
     clinical = [row for row in DESIGNS if row[0] in {
@@ -134,8 +136,8 @@ def main() -> None:
     fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2), constrained_layout=True)
 
     display = table[table.cohort_or_pool.isin([
-        "GSE126044", "GSE78220", "GSE176307", "Four-cohort total",
-        "IMvigor210", "Five-cohort total", "GSE190826", "GSE135222",
+        "GSE91061", "GSE126044", "GSE78220", "GSE176307",
+        "IMvigor210", "GSE190826", "GSE135222",
     ])].copy()
     y = np.arange(len(display))[::-1]
     colors = ["#4C78A8" if m == "OR" else "#F58518" for m in display.effect_measure]

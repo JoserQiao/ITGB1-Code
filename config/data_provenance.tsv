@@ -29,4 +29,4 @@ GSE103322_XENA_METADATA	2026-11-04	Xena dataset version 2019-05-7	data/raw/GSE10
 GSE103322_XENA_SAMPLE_METADATA	2026-11-04	Xena dataset version 2019-05-7	data/raw/GSE103322/GSE103322_sample_metadata.txt	19d16d3887110883a1847d1d985504c67d37e4babef5aaaf0955858af47d7e78
 GSE103322_XENA_ITGB1	2026-11-04	Xena HNSCC/GSE103322_HNSCC_exp.txt query	data/processed/GSE103322/itgb1_expression.tsv	cf56a377e612dedafa8f83b4ed83564230e12b08678557c88f0d12acdc6ee733
 TCGA_GDC_PATHOLOGY_XENA_ITGB1	2026-11-04	GDC cases API and Xena HiSeqV2_PANCAN query	data/processed/TCGA_pathology_purity/TCGA_ITGB1_pathology_combined.tsv	4a53231e7048f644b5c0a60c69a2f12ce20925b7aad8d8b00311eceddd243a10
-CPTAC_CBIOPORTAL_ITGB1	2026-11-04	cBioPortal public CPTAC profiles API snapshot	data/processed/CPTAC_ITGB1/CPTAC_ITGB1_RNA_protein.tsv	feba16e30b8c37f367911edcc45b3ab910579f7602252113947ed81d5e4be9b9
+CPTAC_CBIOPORTAL_ITGB1	2026-11-05	cBioPortal public CPTAC tumour-profile API snapshot; one paired sample per patient	data/processed/CPTAC_ITGB1/CPTAC_ITGB1_RNA_protein.tsv	6610af9bcf315e7fa179dfd3bbae0772787f73ec424f8a15a9daf5bc1f5f7d4a
