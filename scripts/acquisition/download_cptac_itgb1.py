@@ -44,6 +44,12 @@ def fetch_gene(profile_id, study):
     })
 
 
+def fetch_samples(study):
+    return get_json(f"/studies/{study}/samples", {
+        "projection": "DETAILED", "pageSize": 1000000,
+    })
+
+
 def main():
     root, _ = parse_project_root()
     raw = root / "data/raw/CPTAC_ITGB1"
@@ -58,13 +64,22 @@ def main():
             continue
         protein = fetch_gene(protein_profile["molecularProfileId"], study)
         rna = fetch_gene(rna_profile["molecularProfileId"], study)
+        samples = fetch_samples(study)
         (raw / f"{study}_protein.json").write_text(json.dumps(protein), encoding="utf-8")
         (raw / f"{study}_rna.json").write_text(json.dumps(rna), encoding="utf-8")
+        (raw / f"{study}_samples.json").write_text(json.dumps(samples), encoding="utf-8")
         protein_table = pd.DataFrame(protein)[["sampleId", "patientId", "value"]].rename(
             columns={"value": "ITGB1_protein"})
         rna_table = pd.DataFrame(rna)[["sampleId", "patientId", "value"]].rename(
             columns={"value": "ITGB1_RNA"})
         merged = rna_table.merge(protein_table, on=["sampleId", "patientId"], how="inner")
+        sample_table = pd.DataFrame(samples)[["sampleId", "patientId", "sampleType"]]
+        merged = merged.merge(sample_table, on=["sampleId", "patientId"], how="left", validate="one_to_one")
+        if merged.sampleType.isna().any():
+            raise RuntimeError(f"{study} has paired profiles without sample-type metadata")
+        if not merged.sampleType.eq("Primary Solid Tumor").all():
+            observed = sorted(merged.sampleType.unique())
+            raise RuntimeError(f"{study} includes non-primary-tumour samples: {observed}")
         if merged.patientId.duplicated().any():
             raise RuntimeError(f"{study} contains multiple paired samples for one patient")
         merged.insert(0, "study", study)
@@ -74,7 +89,8 @@ def main():
         provenance.append({
             "study": study, "status": "included", "n": len(merged),
             "unique_patients": merged.patientId.nunique(),
-            "sample_selection": "one paired tumour-profile sample per patient",
+            "sample_type": "Primary Solid Tumor",
+            "sample_selection": "one paired primary-tumour sample per patient",
             "rna_profile": rna_profile["molecularProfileId"],
             "protein_profile": protein_profile["molecularProfileId"],
         })

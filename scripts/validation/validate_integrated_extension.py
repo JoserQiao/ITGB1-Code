@@ -109,8 +109,17 @@ def main() -> None:
     record(rows, "CPTAC one paired sample per patient",
            not cptac_pairs.duplicated(["study", "patientId"]).any(),
            f"duplicate_study_patients={cptac_pairs.duplicated(['study', 'patientId']).sum()}")
+    record(rows, "CPTAC paired profiles are primary solid tumours",
+           cptac_pairs.sampleType.eq("Primary Solid Tumor").all(),
+           f"sample_types={','.join(sorted(cptac_pairs.sampleType.astype(str).unique()))}")
     record(rows, "CPTAC study-level FDR range", protein.fdr.between(0, 1).all(),
            f"studies={len(protein)}")
+    figure_s7 = pd.read_csv(
+        root / "results/figure_source_data/FigureS7_standardized_samples.tsv", sep="\t"
+    )
+    record(rows, "Figure S7 point-level source table complete",
+           len(figure_s7) == 728 and figure_s7[["ITGB1_RNA_z", "ITGB1_protein_z"]].notna().all().all(),
+           f"rows={len(figure_s7)}")
     imputed = pd.read_csv(
         root / "results/clinical_response/IMvigor210_multiple_imputation_pooled.tsv", sep="\t"
     )
@@ -127,6 +136,20 @@ def main() -> None:
     record(rows, "External pathway FDR range",
            external[["fdr", "spearman_fdr"]].apply(lambda x: x.between(0, 1)).all().all(),
            "all adjusted P values must be within [0,1]")
+
+    supplement = root / "results/supplementary_tables"
+    expected_tables = {
+        "TableS1_datasets.tsv", "TableS2_signatures.tsv", "TableS3_clinical_results.tsv",
+        "TableS4_external_meta.tsv", "TableS5_GDSC.tsv", "TableS6_IMvigor_apparent_models.tsv",
+        "TableS7_individual_MDE.tsv", "TableS8A_cross_validation.tsv",
+        "TableS8B_missingness.tsv", "TableS8C_multiple_imputation.tsv",
+        "TableS9_primary_ITGB1_sensitivity.tsv", "TableS10_public_validation.tsv",
+        "supplementary_table_sources.tsv",
+    }
+    observed_tables = {path.name for path in supplement.glob("*.tsv")}
+    record(rows, "Supplementary table generation complete",
+           expected_tables.issubset(observed_tables),
+           f"missing={','.join(sorted(expected_tables - observed_tables)) or 'none'}")
 
     out = root / "results/validation"
     out.mkdir(parents=True, exist_ok=True)

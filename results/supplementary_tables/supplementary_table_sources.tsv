@@ -1,0 +1,13 @@
+Supplementary item	Generated output	Tracked source files	Selection/assembly rule
+Table S1	TableS1_datasets.tsv	multiple tracked result tables	Counts are derived from tracked results; labels and roles are declared in this reporting script.
+Table S2	TableS2_signatures.tsv	config/signatures.tsv	Exact copy.
+Table S3	TableS3_clinical_results.tsv	random_effects_meta_analysis.tsv; GSE135222_pfs_results.tsv; rectal_chemoradiotherapy_results_v3.tsv	Restricted to ITGB1 and the four prespecified composition-adjusted ITGB1 features; composition-score-only pCR rows are outside this table's scope.
+Table S4	TableS4_external_meta.tsv	external_pathway_random_effects_meta.tsv; external_marker_control_meta.tsv	All rows retained; multiplicity family is explicit.
+Table S5	TableS5_GDSC.tsv	gdsc_ITGB1_lineage_adjusted_summary.tsv	All 14 prespecified drugs retained.
+Table S6	TableS6_IMvigor_apparent_models.tsv	IMvigor210_clinical_models.tsv; IMvigor210_incremental_value.tsv	All apparent models retained.
+Table S7	TableS7_individual_MDE.tsv	minimum_detectable_effects.tsv	Aggregate four- and five-cohort rows are excluded because individual-cohort approximations and meta-analytic simulations are reported separately.
+Table S8A	TableS8A_cross_validation.tsv	IMvigor210_repeated_cv_difference_summary.tsv	All prespecified comparisons retained.
+Table S8B	TableS8B_missingness.tsv	IMvigor210_missingness_comparison.tsv	Response-missingness rows retained.
+Table S8C	TableS8C_multiple_imputation.tsv	IMvigor210_multiple_imputation_pooled.tsv	All three prespecified models retained.
+Table S9	TableS9_primary_ITGB1_sensitivity.tsv	random_effects_meta_sensitivity.tsv; random_effects_meta_leave_one_cohort_out.tsv; five_cohort_meta_simulation_mde.tsv	Meta-method and leave-one-out rows are restricted to the primary unadjusted ITGB1 feature; adjusted-feature sensitivity outputs remain in their complete tracked result tables.
+Table S10	TableS10_public_validation.tsv	GSE103322_paired_celltype_comparisons.tsv; TCGA_ITGB1_pathology_meta.tsv; CPTAC_ITGB1_RNA_protein_correlations.tsv; CPTAC_ITGB1_RNA_protein_meta.tsv	All prespecified public-validation rows retained.

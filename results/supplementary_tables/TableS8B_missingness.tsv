@@ -1,0 +1,3 @@
+definition	variable	level	complete_n	incomplete_n	complete_summary	incomplete_summary	test	p_value
+clinical_complete_case	response	binary	270	28	52/270 (19.3%)	16/28 (57.1%)	Fisher exact	3.570717182000835e-05
+TMB_complete_case	response	binary	210	88	47/210 (22.4%)	21/88 (23.9%)	Fisher exact	0.7646545423697181

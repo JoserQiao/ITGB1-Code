@@ -28,6 +28,14 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     associations.to_csv(out / "CPTAC_ITGB1_RNA_protein_correlations.tsv", sep="\t", index=False)
     pd.DataFrame([meta]).to_csv(out / "CPTAC_ITGB1_RNA_protein_meta.tsv", sep="\t", index=False)
+    source = frame[["study", "sampleId", "patientId", "sampleType", "ITGB1_RNA", "ITGB1_protein"]].copy()
+    source["ITGB1_RNA_z"] = source.groupby("study").ITGB1_RNA.transform(
+        lambda values: (values - values.mean()) / values.std(ddof=0))
+    source["ITGB1_protein_z"] = source.groupby("study").ITGB1_protein.transform(
+        lambda values: (values - values.mean()) / values.std(ddof=0))
+    source_dir = root / "results/figure_source_data"
+    source_dir.mkdir(parents=True, exist_ok=True)
+    source.to_csv(source_dir / "FigureS7_standardized_samples.tsv", sep="\t", index=False)
 
 
 if __name__ == "__main__":

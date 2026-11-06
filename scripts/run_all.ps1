@@ -76,6 +76,7 @@ try {
     Invoke-PipelineStep 'scripts.analysis.analyze_gdsc_lineage_adjusted'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_solid_tumor'
     Invoke-PipelineStep 'scripts.analysis.analyze_external_marker_controls'
+    Invoke-PipelineStep 'scripts.reporting.build_supplementary_tables'
 
     # 4. Robustness and external validation
     Invoke-PipelineStep 'scripts.validation.robustness_analysis' @('--bootstrap', '5000', '--cv-repeats', '200')

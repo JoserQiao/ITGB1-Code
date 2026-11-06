@@ -1,0 +1,16 @@
+Dataset	Cancer	Analysis n	Role	Processing/endpoint
+GSE195832	HNSCC	4 paired patients	Single-cell source attribution	10x scRNA-seq; paired pre/post nivolumab
+GSE103322	HNSCC	5,578 cells; 18 patients	Independent single-cell validation	Original cell-type and patient annotations; Xena ITGB1 query
+GSE91061	Melanoma	49; 10 responders	ICI response	Pretreatment FPKM
+GSE78220	Melanoma	27; 14 responders	ICI response	Pretreatment FPKM
+GSE176307	Urothelial cancer	87; 16 responders	ICI response	Pretreatment TPM
+GSE126044	NSCLC	16; 5 responders	ICI response	Pretreatment counts
+IMvigor210	Urothelial cancer	298; 68 responders	ICI response and incremental value	Pretreatment DESeq2-normalized RNA-seq; atezolizumab
+GSE135222	NSCLC	27; 21 PFS events	PFS	Pretreatment RNA-seq
+GSE190826	Rectal cancer	105; 26 pCR	Chemoradiotherapy pCR	Pretreatment bulk RNA
+GSE172356	PDAC	62	External pathway validation	HiSeq X Ten RNA-seq
+GSE113255	Gastric cancer	130 tumours	External pathway validation	NextSeq 500 RNA-seq
+GSE76427	HCC	115 tumours	External pathway validation	GPL10558 expression array; normalized series matrix; no TPM conversion
+TCGA/GDC pathology	10 cancers	3,330-3,408 samples	Direct composition validation	Pathologist-estimated stromal, tumour-cell and tumour-nuclei percentages
+CPTAC/cBioPortal	7 cancers	728 paired primary-tumour samples	RNA-protein validation	Mass-spectrometry protein and matched RNA abundance
+Cell Model Passports/GDSC	Cancer cell lines	758-1,019 per drug	Lineage-aware ln(IC50)	14 prespecified cytotoxic drugs

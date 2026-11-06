@@ -9,20 +9,27 @@ GSE113255 sample count	True	observed=130; expected=130
 GSE113255 sample identifiers unique	True	expression_duplicates=0; metadata_duplicates=0
 GSE113255 complete expression matrix	True	missing_values=0
 GSE113255 ITGB1 present and variable	True	ITGB1_sd=0.452814
-GSE113255 full-composition residual orthogonality	True	max_abs_pearson=3.3e-15
+GSE113255 full-composition residual orthogonality	True	max_abs_pearson=3.32e-15
 GSE76427 sample count	True	observed=115; expected=115
 GSE76427 sample identifiers unique	True	expression_duplicates=0; metadata_duplicates=0
 GSE76427 complete expression matrix	True	missing_values=0
 GSE76427 ITGB1 present and variable	True	ITGB1_sd=0.589967
 GSE76427 full-composition residual orthogonality	True	max_abs_pearson=1.76e-15
 GDSC one primary assay per drug	True	drugs=14; duplicate_names=0
-GDSC minimum total sample size	True	minimum_n=757
+GDSC minimum total sample size	True	minimum_n=758
 GDSC estimates finite	True	nonfinite=0
 GDSC FDR range	True	columns=global_fdr,lineage_adjusted_fdr,meta_fdr
+Clinical AUC uses prespecified resistance direction	True	response and resistance AUCs must sum to one; no direction-free maximum is allowed
+Primary clinical meta-analysis uses REML	True	methods=REML tau2; modified Hartung-Knapp CI
+GSE103322 independent single-cell patients	True	patients=18
+GSE103322 prespecified comparison FDR range	True	comparisons=2
+TCGA pathology validation covers ten cancers	True	k=10,10,10
+CPTAC RNA-protein validation covers seven studies	True	studies=7; paired_samples=728
+CPTAC one paired sample per patient	True	duplicate_study_patients=0
+CPTAC paired profiles are primary solid tumours	True	sample_types=Primary Solid Tumor
+CPTAC study-level FDR range	True	studies=7
+Figure S7 point-level source table complete	True	rows=728
+IMvigor210 multiple-imputation result grid	True	models=3; imputations=50
 External pathway result grid complete	True	observed_rows=30; expected_rows=30
 External pathway FDR range	True	all adjusted P values must be within [0,1]
-Clinical AUC uses prespecified resistance direction	True	response and resistance AUCs sum to one; no direction-free maximum
-Primary clinical meta-analysis uses REML	True	REML tau2; modified Hartung-Knapp CI
-GSE103322 independent single-cell patients	True	patients=18
-TCGA pathology validation covers ten cancers	True	k=10 for all pathology variables
-CPTAC RNA-protein validation covers seven studies	True	studies=7; paired_samples=728
+Supplementary table generation complete	True	missing=none

@@ -27,13 +27,14 @@ Run the complete workflow with `scripts/run_all.ps1`.
 23. `scripts.analysis.analyze_gdsc_lineage_adjusted`
 24. `scripts.analysis.analyze_external_solid_tumor`
 25. `scripts.analysis.analyze_external_marker_controls`
-26. `scripts.validation.verify_data_provenance --strict`
-27. `scripts.validation.robustness_analysis`
-28. `scripts.validation.extended_auc_bootstrap`
-29. `scripts.validation.alternative_mcpcounter`
-30. `scripts.validation.validate_integrated_extension`
-31. `scripts.visualization.plot_all_figures_ordered`
-32. `scripts.visualization.plot_integrated_extension`
-33. `scripts.visualization.plot_strengthening_analyses`
+26. `scripts.reporting.build_supplementary_tables`
+27. `scripts.validation.verify_data_provenance --strict`
+28. `scripts.validation.robustness_analysis`
+29. `scripts.validation.extended_auc_bootstrap`
+30. `scripts.validation.alternative_mcpcounter`
+31. `scripts.validation.validate_integrated_extension`
+32. `scripts.visualization.plot_all_figures_ordered`
+33. `scripts.visualization.plot_integrated_extension`
+34. `scripts.visualization.plot_strengthening_analyses`
 
 Each command accepts `--project-root`. Analysis outputs are written to `results/`; figures are written to `figures/`.

@@ -47,9 +47,11 @@ See `R_DEPENDENCIES.md` for the exact R setup and version check.
 - `scripts/analysis/`: cellular-origin, composition, clinical-endpoint, negative-control, external-pathway and lineage-aware GDSC analyses.
 - `scripts/validation/`: bootstrap, cross-validation, alternative-signature and invariant checks.
 - `scripts/visualization/`: final manuscript and supplementary figures.
+- `scripts/reporting/`: deterministic Supplementary Tables S1-S10 and their source/selection manifest.
 - `results/`: machine-readable final estimates used in the manuscript.
 - `figures/`: final PNG and PDF figures.
 - `MANUSCRIPT_CODE_MAP.md`: figure-by-figure mapping.
+- `results/supplementary_tables/`: generated table-level artifacts matching the supplement.
 
 ## Statistical guardrails
 
@@ -65,6 +67,7 @@ See `R_DEPENDENCIES.md` for the exact R setup and version check.
 - Transcriptomic composition scores are proxies, not DNA-derived purity estimates.
 - REML tau-squared with modified Hartung-Knapp inference; DerSimonian-Laird and leave-one-cohort-out estimates are sensitivity analyses.
 - Duplicate GDSC assays are selected by sample coverage before association testing.
+- CPTAC profiles are matched to cBioPortal sample metadata and restricted to one paired primary-solid-tumour sample per patient.
 - GDSC lineage labels come from Cell Model Passports sample/tissue metadata; DepMap is not used.
 - FDR is controlled within prespecified analysis families.
 - Association is not interpreted as causal resistance or therapeutic utility.
