@@ -54,7 +54,7 @@ def table_s1(root: Path) -> pd.DataFrame:
 
     rows = [
         ["GSE195832", "HNSCC", "4 paired patients", "Single-cell source attribution", "10x scRNA-seq; paired pre/post nivolumab"],
-        ["GSE103322", "HNSCC", f"{int(sc.n_cells.sum()):,} cells; 18 patients", "Independent single-cell validation", "Original cell-type and patient annotations; Xena ITGB1 query"],
+        ["GSE103322", "HNSCC", f"{int(sc.n_cells.sum()):,} analysed cells (5,902 downloaded); 18 patients", "Independent single-cell validation", "Original cell-type and patient annotations; 324 cells without cell-type annotation excluded"],
         ["GSE91061", "Melanoma", response_summary("GSE91061"), "ICI response", "Pretreatment FPKM"],
         ["GSE78220", "Melanoma", response_summary("GSE78220"), "ICI response", "Pretreatment FPKM"],
         ["GSE176307", "Urothelial cancer", response_summary("GSE176307"), "ICI response", "Pretreatment TPM"],

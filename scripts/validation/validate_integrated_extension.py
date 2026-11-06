@@ -85,6 +85,9 @@ def main() -> None:
     record(rows, "GSE103322 independent single-cell patients",
            gse103322.patient_id.nunique() == 18,
            f"patients={gse103322.patient_id.nunique()}")
+    record(rows, "GSE103322 annotated cells used in cell-type analysis",
+           int(gse103322.n_cells.sum()) == 5578,
+           f"analyzed_cells={int(gse103322.n_cells.sum())}; downloaded_cells=5902; excluded_without_cell_type=324")
     gse103322_tests = pd.read_csv(
         root / "results/single_cell/GSE103322_paired_celltype_comparisons.tsv", sep="\t"
     )

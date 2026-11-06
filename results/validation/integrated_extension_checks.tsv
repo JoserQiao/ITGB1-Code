@@ -22,6 +22,7 @@ GDSC FDR range	True	columns=global_fdr,lineage_adjusted_fdr,meta_fdr
 Clinical AUC uses prespecified resistance direction	True	response and resistance AUCs must sum to one; no direction-free maximum is allowed
 Primary clinical meta-analysis uses REML	True	methods=REML tau2; modified Hartung-Knapp CI
 GSE103322 independent single-cell patients	True	patients=18
+GSE103322 annotated cells used in cell-type analysis	True	analyzed_cells=5578; downloaded_cells=5902; excluded_without_cell_type=324
 GSE103322 prespecified comparison FDR range	True	comparisons=2
 TCGA pathology validation covers ten cancers	True	k=10,10,10
 CPTAC RNA-protein validation covers seven studies	True	studies=7; paired_samples=728
