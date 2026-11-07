@@ -2,7 +2,7 @@
 
 This repository reproduces the manuscript:
 
-> Cellular sources, composition dependence and context-specific drug-sensitivity associations of bulk ITGB1 in public cancer datasets
+> Cellular sources, composition dependence and context-specific drug-sensitivity associations of bulk ITGB1
 
 ## Questions addressed
 
